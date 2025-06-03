@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('code');
             $table->text('description');
             $table->text('padre_description');
-            $table->text('actvity');
+            $table->text('activity');
             $table->timestamps();
         });
     }
