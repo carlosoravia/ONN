@@ -24,9 +24,9 @@
         </div>
 
         <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" name="email" type="email" class="mt-1 block w-full" :value="old('email', $user->email)" required autocomplete="username" />
-            <x-input-error class="mt-2" :messages="$errors->get('email')" />
+            <x-input-label for="operator_code" :value="__('Operator Code')" />
+            <x-text-input id="operator_code" name="operator_code" type="text" class="mt-1 block w-full" :value="old('operator_code', $user->operator_code)" required autocomplete="username" />
+            <x-input-error class="mt-2" :messages="$errors->get('operator_code')" />
 
             @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! $user->hasVerifiedEmail())
                 <div>

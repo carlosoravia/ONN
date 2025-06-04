@@ -1,0 +1,49 @@
+<?php
+
+namespace App\Console\Commands;
+
+use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Hash;
+use App\Models\User;
+
+class FixPassword extends Command
+{
+    /**
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
+    protected $signature = 'app:fix-password';
+
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'Command description';
+
+    /**
+     * Execute the console command.
+     */
+    public function handle()
+    {
+        $this->info('🔍 Inizio scansione utenti...');
+        $count = 0;
+
+        $users = User::all();
+
+        foreach ($users as $user) {
+            $info = Hash::info($user->password);
+
+            if ($info['algoName'] !== 'bcrypt') {
+                $this->warn("⚠️  Password non Bcrypt per: {$user->name}");
+
+                $user->password = Hash::make($user->password);
+                $user->save();
+                $count++;
+            }
+        }
+
+        $this->info("✅ Completato: {$count} utenti aggiornati.");
+    }
+}
