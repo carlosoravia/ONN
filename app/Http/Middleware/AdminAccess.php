@@ -16,6 +16,15 @@ class AdminAccess
      */
     public function handle(Request $request, Closure $next): Response
     {
+        if (!Auth::check()) {
+            return redirect('/login');
+        }
+
+        // Se autenticato ma non Admin, blocca l’accesso
+        if (Auth::user()->role !== 'Admin') {
+            abort(403, 'Accesso negato');
+        }
+
         return $next($request);
     }
 }
