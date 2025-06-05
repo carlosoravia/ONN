@@ -15,6 +15,26 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="font-sans text-gray-900 antialiased">
+        @if (session('success'))
+            <div class="p-4 rounded mb-4 w-max h-max bg-green-100 text-green-800 message">
+                {{ session('success') }}
+                <button class="text-xl font-bold ml-4 messageBtn">×</button>
+            </div>
+        @endif
+        @if ($errors->any())
+            @foreach ($errors->all() as $e)
+                <div class="p-4 rounded mb-4 w-max h-max bg-red-100 text-red-800 message">
+                    {{ $e }}
+                    <button class="text-xl font-bold ml-4 messageBtn">×</button>
+                </div>
+            @endforeach
+        @endif
+        @if (session('info'))
+            <div class="p-4 rounded mb-4 w-max h-max bg-red-100 text-red-800 message">
+                {{ session('info') }}
+                <button class="text-xl font-bold ml-4 messageBtn">×</button>
+            </div>
+        @endif
         <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100 dark:bg-gray-900">
             <div>
                 <a href="/">
