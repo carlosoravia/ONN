@@ -11,13 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('moca_preassembleds', function (Blueprint $table) {
-            $table->id();
-            $table->string('code');
-            $table->text('description');
-            $table->text('padre_description');
-            $table->text('actvity');
-            $table->timestamps();
+        Schema::table('articles', function (Blueprint $table) {
+            $table->boolean('is_moca')->default(false)->after('description');
         });
     }
 
@@ -26,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('moca_preassembleds');
+        Schema::table('articles', function (Blueprint $table) {
+            $table->dropColumn('is_moca');
+        });
     }
 };
