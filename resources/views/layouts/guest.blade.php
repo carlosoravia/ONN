@@ -14,7 +14,7 @@
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body class="font-sans text-gray-900 bg-gray-100 dark:bg-gray-900 antialiased">
+    <body class="font-sans bg-gray2-100 antialiased">
         @if (session('success'))
             <div class="p-4 rounded mb-4 w-max h-max bg-green-100 text-green-800 message">
                 {{ session('success') }}
@@ -37,9 +37,7 @@
         @endif
         <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0">
             <div>
-                <a href="/">
-                    <x-application-logo class="h-40 bg-center text-gray-500" />
-                </a>
+                <x-application-logo class="h-40 bg-center text-dark-500" />
             </div>
 
             <div class="w-full sm:max-w-md mt-6 px-6 py-4 overflow-hidden sm:rounded-lg">
