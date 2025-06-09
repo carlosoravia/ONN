@@ -4,5 +4,6 @@
 *.txt
 *.log
 *.py
+*.sql
 /core/
 /gui/
