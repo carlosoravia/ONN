@@ -1,0 +1,8 @@
+*.xlsx
+*.json
+*.csv
+*.txt
+*.log
+*.py
+/core/
+/gui/
