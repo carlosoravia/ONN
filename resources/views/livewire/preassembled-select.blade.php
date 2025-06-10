@@ -10,12 +10,12 @@
             </div>
         </div>
         <h2 class="text-xl font-bold text-center mb-4 border-y py-2 bg-gray-900">PRE-ASSEMBLATI</h2>
-        <table class="w-full h-max-content border border-gray-400 text-sm">
+        <table class="w-full h-max-content border border-gray-900 text-sm">
             <thead class="bg-gray-200 text-left block w-full">
                 <tr class="table w-full table-fixed text-white">
-                    <th class="border border-gray-400 px-2 py-1 uppercase w-2/4">descrizione<br><span class="text-xs font-normal">(componenti necessari per l'assemblaggio)</span></th>
-                    <th class="border border-gray-400 px-2 py-1 uppercase w-1/4">codice pre-assemblato<br><span class="text-xs">ONN WATER</span></th>
-                    <th class="border border-gray-400 px-2 py-1 uppercase w-1/4"></th>
+                    <th class="border border-gray-900 px-2 py-1 uppercase w-2/4">descrizione<br><span class="text-xs font-normal">(componenti necessari per l'assemblaggio)</span></th>
+                    <th class="border border-gray-900 px-2 py-1 uppercase w-1/4">codice pre-assemblato<br><span class="text-xs">ONN WATER</span></th>
+                    <th class="border border-gray-900 px-2 py-1 uppercase w-1/4"></th>
                 </tr>
             </thead>
             <tbody class="block max-h-[55vh] overflow-y-auto w-full">

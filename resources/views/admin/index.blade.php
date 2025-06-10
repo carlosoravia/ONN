@@ -23,19 +23,19 @@
                     <h2 class="text-xl font-semibold mb-2 text-gray-100">Audit Logs</h2>
                     <p class="text-gray-100">Ultime azioni fatte dagli utenti</p>
                     <table class="w-full h-max-content border border-gray-400 text-sm">
-                        <thead class="text-left block w-full">
+                        <thead class="table w-full table-fixed">
                             <tr>
-                                <th class="px-4 py-2 text-gray-100">Data</th>
-                                <th class="px-4 py-2 text-gray-100">Azione</th>
-                                <th class="px-4 py-2 text-gray-100">Utente</th>
+                                <th class="px-4 py-2 text-gray-100 text-start w-2/4">Data</th>
+                                <th class="px-4 py-2 text-gray-100 text-start w-1/4">Azione</th>
+                                <th class="px-4 py-2 text-gray-100 text-start w-1/4">Utente</th>
                             </tr>
                         </thead>
                         <tbody class="block max-h-[55vh] overflow-y-auto w-full">
                             @foreach ($audits as $a)
-                                <tr class="bg-gray-800 hover:bg-gray-700">
-                                    <td class="px-4 py-2 text-gray-300">{{ date_format($a->created_at, "H:i:s | d/m/Y") }}</td>
-                                    <td class="px-4 py-2 text-gray-300">{{ $a->action }}</td>
-                                    <td class="px-4 py-2 text-gray-300">{{ $a->user->name }}</td>
+                                <tr class="bg-gray-800 hover:bg-gray-700 border-b border-gray-600 table w-full table-fixed">
+                                    <td class="px-4 py-2 text-gray-300 text-start w-2/4">{{ date_format($a->created_at, "H:i:s | d/m/Y") }}</td>
+                                    <td class="px-4 py-2 text-gray-300 text-start w-1/4">{{ $a->action }}</td>
+                                    <td class="px-4 py-2 text-gray-300 text-start w-1/4">{{ $a->user->name }}</td>
                                 </tr>
                             @endforeach
                         </tbody>
