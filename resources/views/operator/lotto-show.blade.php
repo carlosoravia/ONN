@@ -7,7 +7,7 @@
                     {{-- <p class="text-sm">Prima emissione del 22/03/2024<br>Rev. 01 del 16/04/2024</p> --}}
                 </div>
                 <div class="text-right">
-                    <img src="/images/logo-white.png" alt="Logo Onn Water" class="h-12 object-contain">
+                    <img src="/images/logo_server_2.png" alt="Logo Onn Water" class="h-12 object-contain">
                 </div>
             </div>
             <h2 class="text-xl font-bold text-center mb-4 border-y py-2 bg-blue-50 dark:bg-blue-900 dark:text-blue-200">LOTTI</h2>

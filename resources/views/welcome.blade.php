@@ -2,10 +2,10 @@
     @auth
         <h1 class="text-white text-center text-3xl uppercase">Ciao <span class="text-azure-400">{{ Auth::user()->name }}</span></h1>
         <div class="h-fit flex justify-center my-5">
-            <a class="bg-azure-500 hover:bg-azure-400 transition delay-150 duration-300 ease-in-out text-center my-auto p-5 mx-3 shadow-md border rounded-xl focus:color-dark" href="{{Auth::user()->role == 'Admin' ? route('admin.index') : route('operator.index')}}">Vai alla dashboard</a>
+            <a class="hover:bg-azure-400 hover:text-dark transition delay-150 duration-300 ease-in-out text-center text-white my-auto p-5 mx-3 shadow-md border border-azure-500 rounded-xl focus:color-dark" href="{{Auth::user()->role == 'Admin' ? route('admin.index') : route('operator.index')}}">Vai alla dashboard</a>
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
-                <button class="text-center bg-red-500 hover:bg-red-400 transition delay-150 duration-300 ease-in-out my-auto p-5 mx-3 shadow-md border border-red-500 text-dark rounded-xl focus:color-dark" href="{{route('logout')}}">Log Out</button>
+                <button class="text-center bg-red-500 hover:bg-red-700 transition delay-150 duration-300 ease-in-out my-auto p-5 mx-3 shadow-md border border-red-500 text-dark rounded-xl focus:color-dark" href="{{route('logout')}}">Esci</button>
             </form>
         </div>
     @endauth

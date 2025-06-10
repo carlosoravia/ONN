@@ -1,11 +1,11 @@
-<section>
+<section class="w-">
     <header>
         <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-            {{ __('Update Password') }}
+            {{ __('Cambia Password') }}
         </h2>
 
-        <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-            {{ __('Ensure your account is using a long, random password to stay secure.') }}
+        <p class="mt-1 text-sm text-dark">
+            {{ __('La password deve essere di almeno 8 caratteri') }}
         </p>
     </header>
 
@@ -40,7 +40,7 @@
                     x-show="show"
                     x-transition
                     x-init="setTimeout(() => show = false, 2000)"
-                    class="text-sm text-gray-600 dark:text-gray-400"
+                    class="text-sm text-white dark:text-gray-400"
                 >{{ __('Saved.') }}</p>
             @endif
         </div>

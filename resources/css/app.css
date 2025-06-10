@@ -1,3 +1,14 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+    font-family: 'sharp-sans';
+    src: url('/fonts/sharp-sans/Sharp/ Sans.otf') format('otf');
+    font-weight: normal;
+    font-style: normal;
+}
+
+body {
+    font-family: 'sharp-sans', sans-serif;
+}

@@ -113,7 +113,7 @@ class OperatorController extends Controller
         foreach ($lottos as $lotto) {
             array_push($preassembleds, Preassembled::where('id', $lotto->pre_assembled_id)->first());
         }
-        return view('operator.select-lotto-to-edit', compact('lottos', 'preassembleds'));
+        return view('operator.lotto-show', compact('lottos', 'preassembleds'));
     }
 
     public function editLotto($id)
@@ -128,7 +128,7 @@ class OperatorController extends Controller
             array_push($articles, Article::where('id', $component->article_id)->first());
             array_push($supplierCodes, LottoArticle::where('article_id', $component->article_id)->first());
         }
-        return view('operator.edit-lotto', compact('lotto', 'preAssembled', 'components', 'lottoCode', 'articles', 'supplierCodes'));
+        return view('operator.lotto-edit', compact('lotto', 'preAssembled', 'components', 'lottoCode', 'articles', 'supplierCodes'));
     }
 
     public function updateLotto(Request $request){

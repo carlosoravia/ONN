@@ -5,7 +5,7 @@
         <!-- Password Reset Token -->
         <input type="hidden" name="token" value="{{ $request->route('token') }}">
 
-        <!-- Email Address -->
+        <!-- Operator Code -->
         <div>
             <x-input-label for="operator_code" :value="__('Operator Code')" />
             <x-text-input id="operator_code" class="block mt-1 w-full" type="text" name="operator_code" :value="old('operator_code', $request->operator_code)" required autofocus autocomplete="username" />
