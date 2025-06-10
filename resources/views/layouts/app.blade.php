@@ -15,7 +15,7 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
+        <div class="min-h-screen bg-gray-500">
             @include('layouts.navigation')
             @if (session('success'))
                 <div class="p-4 rounded mb-4 w-max h-max bg-green-100 text-green-800 message">

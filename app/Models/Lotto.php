@@ -9,8 +9,8 @@ class Lotto extends Model
     use Auditable;
 
     protected $fillable = [
-        'lotto_code',
-        'preassembly_id',
+        'code_lotto',
+        'pre_assembled_id',
         'quantity',
     ];
 

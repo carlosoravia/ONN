@@ -14,7 +14,7 @@
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body class="font-sans bg-gray2-100 antialiased">
+    <body class="font-sans bg-gray-500 antialiased">
         @if (session('success'))
             <div class="p-4 rounded mb-4 w-max h-max bg-green-100 text-green-800 message">
                 {{ session('success') }}

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Lotto;
 use App\Models\Preassembled;
 use App\Models\LottoArticle;
@@ -27,11 +28,14 @@ class OperatorController extends Controller
     {
         $request->validate([
             'quantity' => 'required|integer|min:1',
+            'code_lotto' => 'required|string|max:255',
         ], [
             'quantity.required' => 'Il numero di pezzi è obbligatorio.',
             'quantity.min' => 'Il numero deve contenere almeno :min caratteri.',
+            'code_lotto.required' => 'Il codice lotto è obbligatorio.',
+            'code_lotto.max' => 'Il codice lotto non può superare i :max caratteri.',
+            'code_lotto.string' => 'Il codice lotto deve essere una stringa valida.',
         ]);
-
         $lotto = Lotto::create(
             ['code_lotto' => $request->code_lotto,
             'pre_assembled_id' => $request->pre_assembled_id,
@@ -66,7 +70,7 @@ class OperatorController extends Controller
         $pdf->save($fullPath);
 
         if(Auth::user()->role === "Admin"){
-            return redirect('')->route('admin.index')
+            return redirect()->route('admin.index')
             ->with('success', 'Lotto creato con successo');
         } else if (Auth::user()->role === "Operator") {
             return redirect()->route('operator.index')

@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Console\Commands;
-
+use Illuminate\Support\Facades\Storage;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
@@ -28,13 +29,16 @@ class FixPassword extends Command
     public function handle()
     {
         $this->info('🔍 Inizio scansione utenti...');
-        $count = 0;
-
+        $count = 2;
         $users = User::all();
-
+        $path = storage_path('app/private/lista-utenti-server.xlsx');
+        $spreadsheet = IOFactory::load($path);
+        $sheet = $spreadsheet->getActiveSheet();
+        $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
         foreach ($users as $user) {
+            $sheet->setCellValue('A' . $count, $user->name);
+            $sheet->setCellValue('B' . $count, $user->password);
             $info = Hash::info($user->password);
-
             if ($info['algoName'] !== 'bcrypt') {
                 $this->warn("⚠️  Password non Bcrypt per: {$user->name}");
 
@@ -43,7 +47,7 @@ class FixPassword extends Command
                 $count++;
             }
         }
-
+        $writer->save($path);
         $this->info("✅ Completato: {$count} utenti aggiornati.");
     }
 }
