@@ -1,5 +1,5 @@
 <div class="max-w-6xl mx-auto border border-gray-900 p-4 rounded shadow mt-12">
-    <form action="{{ Route::current()->getName() == 'lotto.create' ? route('lotto.update') : route('lotto.submit') }}" method="POST">
+    <form action="{{ Route::current()->getName() == 'lotto.create' ? route('lotto.submit') : route('lotto.update') }}" method="POST">
         @csrf
         <input type="hidden" name="pre_assembled_id" value="{{ $preAssembled->id }}">
         <input type="hidden" name="code_lotto" value="{{ $lottoCode }}">

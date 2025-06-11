@@ -9,8 +9,11 @@ use App\Models\Preassembled;
 use App\Models\LottoArticle;
 use App\Models\PreassembledArticle;
 use App\Models\Article;
+use App\Models\AuditLog;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Services\GenerateLottoNumberService as LottoService;
+use App\Services\AuditLogService;
+use App\Services\PivotAuditService;
 
 
 class OperatorController extends Controller
@@ -41,6 +44,8 @@ class OperatorController extends Controller
             'pre_assembled_id' => $request->pre_assembled_id,
             'quantity' => $request->quantity]
         );
+        AuditLogService::log('created', 'creato lotto', $lotto);
+
         foreach ($request->components as $component) {
             LottoArticle::create([
                 'lotto_id' => $lotto->id,
@@ -113,7 +118,7 @@ class OperatorController extends Controller
         foreach ($lottos as $lotto) {
             array_push($preassembleds, Preassembled::where('id', $lotto->pre_assembled_id)->first());
         }
-        return view('operator.lotto-show', compact('lottos', 'preassembleds'));
+        return view('operator.lottos-show', compact('lottos', 'preassembleds'));
     }
 
     public function editLotto($id)
@@ -133,12 +138,20 @@ class OperatorController extends Controller
 
     public function updateLotto(Request $request){
         $lotto = Lotto::where('code_lotto', $request->code_lotto)->first();
+        $oldSupplierCode = [];
+        $newSupplierCode = [];
         $lotto->update(
         [
             'quantity' => $request->quantity
         ]
         );
         foreach ($request->components as $component) {
+
+            $pivot = LottoArticle::where('lotto_id', $lotto->id)
+                ->where('article_id', $component['article_id'])
+                ->first();
+
+            array_push($oldSupplierCode, $pivot->supplier_code ?? null);
             LottoArticle::updateOrCreate(
                 [
                     'lotto_id' => $lotto->id,
@@ -148,9 +161,17 @@ class OperatorController extends Controller
                     'supplier_code' => $component['supplier_code'] ?? null,
                 ]
             );
+            array_push($newSupplierCode, $component['supplier_code']);
         }
+        AuditLog::create([
+            'user_id'     => Auth::id(),
+            'action'      => 'updated',
+            'table_name'  => 'lotto_articles',
+            'record_id'   => $lotto->id,
+            'changed_data'=> [$oldSupplierCode, $newSupplierCode],
+        ]);
         if(Auth::user()->role === "Admin"){
-            return redirect('')->route('admin.index')
+            return redirect()->route('admin.index')
             ->with('success', 'Lotto aggiornato con successo');
         } else if (Auth::user()->role === "Operator") {
             return redirect()->route('operator.index')

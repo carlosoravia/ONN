@@ -22,4 +22,20 @@ class AuditLog extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function getTargetRecord()
+{
+    $map = [
+        'lotti' => \App\Models\Lotto::class,
+        'users' => \App\Models\User::class,
+        'pre_assemblati' => \App\Models\PreAssemblato::class,
+        // aggiungi altri se necessario
+    ];
+
+    if (!isset($map[$this->table_name])) {
+        return null;
+    }
+
+    return $map[$this->table_name]::find($this->record_id);
+}
 }

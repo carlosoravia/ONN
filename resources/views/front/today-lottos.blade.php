@@ -1,4 +1,5 @@
 <x-app-layout>
+    @if ($lottos)
     <div class="max-w-6xl h-fit mx-auto my-0 border border-gray-900 p-4 rounded shadow mt-9">
         <form wire:submit.prevent="submit">
             <div class="flex justify-between items-center border-b border-gray-300 pb-2 mb-4">
@@ -38,4 +39,9 @@
             </a>
         </div>
     </div>
+    @else
+    <div class="">
+            <h2>Al momento non sono stati creati lotti</h2>
+        </div>
+    @endif
 </x-app-layout>

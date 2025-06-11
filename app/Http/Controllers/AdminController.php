@@ -10,13 +10,10 @@ use App\Models\Lotto;
 class AdminController extends Controller
 {
     public function index(){
-        $audits = AuditLog::all();
-        $lottos = Lotto::where('created_at', '>=', now()->subDays(30))->get();
+        $audits = AuditLog::all()->sortByDesc('created_at')->take(20);
+        $lottos = Lotto::where('created_at', '>=', date_format(now(), 'Y-m-d'))->get();
         $lastLotto = Lotto::orderBy('created_at', 'desc')->first();
         $lottosCount = $lottos->count();
-        if (empty($audits)) {
-            return view('admin.index', ['audits' => []]);
-        }
         return view('admin.index', compact('audits', 'lastLotto', 'lottosCount'));
     }
 
@@ -26,5 +23,14 @@ class AdminController extends Controller
             return view('admin.edit-users', ['users' => []]);
         }
         return view('admin.edit-users', compact('users'));
+    }
+
+    public function showAuditLogs($id)
+    {
+        $audit = AuditLog::findOrFail($id);
+        $record = $audit->getTargetRecord();
+        $user = $audit->user;
+        $updatedData = $audit->changed_data;
+        return view('admin.show-audit-logs', compact('audit','record', 'user', 'updatedData'));
     }
 }

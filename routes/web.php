@@ -35,6 +35,7 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth', AdminAccess::class])->group(function () {
     Route::get('/admin-dashboard', [AdminController::class, 'index'])->name('admin.index');
     Route::get('/edit-users', [AdminController::class, 'editUsers'])->name('admin.editUsers');
+    Route::get('/audit-logs/{id}', [AdminController::class, 'showAuditLogs'])->name('admin.auditLog');
 });
 
 

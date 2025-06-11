@@ -9,7 +9,8 @@ class FrontController extends Controller
 {
     public function showTodayLottos(){
         $preassembleds = [];
-        $lottos = Lotto::where('created_at', '>=', now()->subDays(30))->get();
+        $lottos = [];
+        $lottos = Lotto::where('created_at', '>=', date_format(now(), 'Y-m-d'))->get();
         foreach ($lottos as $lotto) {
             array_push($preassembleds, Preassembled::where('id', $lotto->pre_assembled_id)->get());
         }
