@@ -24,18 +24,41 @@ class AuditLog extends Model
     }
 
     public function getTargetRecord()
-{
-    $map = [
-        'lotti' => \App\Models\Lotto::class,
-        'users' => \App\Models\User::class,
-        'pre_assemblati' => \App\Models\PreAssemblato::class,
-        // aggiungi altri se necessario
-    ];
+    {
+        $map = [
+            'lottos' => \App\Models\Lotto::class,
+            'users' => \App\Models\User::class,
+            'pre_assembleds' => \App\Models\PreAssemblato::class,
+            'lotto_articles' => \App\Models\LottoArticle::class,
+            // aggiungi altri se necessario
+        ];
 
-    if (!isset($map[$this->table_name])) {
-        return null;
+        if (!isset($map[$this->table_name])) {
+            return null;
+        }
+
+        return $map[$this->table_name]::find($this->record_id);
     }
 
-    return $map[$this->table_name]::find($this->record_id);
-}
+    public function getRecordUrl()
+    {
+        $routes = [
+            'lotto_articles' => function ($id) {
+                $pivot = \App\Models\LottoArticle::find($id);
+                return $pivot && $pivot->lotto_id
+                    ? route('lotto.edit', $pivot->lotto_id)
+                    : null;
+            },
+
+            'lottos' => fn($id) => route('lotto.edit', $id),
+            // 'users' => fn($id) => route('users.show', $id),
+            // 'pre_assembleds' => fn($id) => route('pre_assembleds.show', $id),
+        ];
+
+        $table = $this->table_name;
+
+        return isset($routes[$table])
+            ? $routes[$table]($this->record_id)
+            : null;
+    }
 }

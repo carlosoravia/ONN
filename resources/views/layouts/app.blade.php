@@ -18,35 +18,26 @@
         <div class="min-h-screen bg-gray-500">
             @include('layouts.navigation')
             @if (session('success'))
-                <div class="p-4 rounded mb-4 w-max h-max bg-green-100 text-green-800 message">
+                <div class="p-4 rounded mb-4 w-max h-max fixed top-15 left-0 bg-green-100 text-green-800 message">
                     {{ session('success') }}
                     <button class="text-xl font-bold ml-4 messageBtn">×</button>
                 </div>
             @endif
             @if ($errors->any())
                 @foreach ($errors->all() as $e)
-                    <div class="p-4 rounded mb-4 w-max h-max bg-red-100 text-red-800 message">
+                    <div class="p-4 rounded mb-4 w-max h-max fixed top-15 left-0 bg-red-100 text-red-800 message">
                         {{ $e }}
                         <button class="text-xl font-bold ml-4 messageBtn">×</button>
                     </div>
                 @endforeach
             @endif
             @if (session('info'))
-                <div class="p-4 rounded mb-4 w-max h-max bg-red-100 text-red-800 message">
+                <div class="p-4 rounded mb-4 w-max h-max fixed top-15 left-0 bg-red-100 text-red-800 message">
                     {{ session('info') }}
                     <button class="text-xl font-bold ml-4 messageBtn">×</button>
                 </div>
             @endif
-            <!-- Page Heading -->
-            @isset($header)
-                <header class="bg-white dark:bg-gray-800 shadow">
-                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                        {{ $header }}
-                    </div>
-                </header>
-            @endisset
 
-            <!-- Page Content -->
             <main>
                 {{ $slot }}
             </main>

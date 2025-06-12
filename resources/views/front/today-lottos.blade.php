@@ -1,5 +1,5 @@
-<x-app-layout>
-    @if ($lottos)
+<x-app-layout class="relative">
+    @if (count($lottos) > 0)
     <div class="max-w-6xl h-fit mx-auto my-0 border border-gray-900 p-4 rounded shadow mt-9">
         <form wire:submit.prevent="submit">
             <div class="flex justify-between items-center border-b border-gray-300 pb-2 mb-4">
@@ -18,7 +18,7 @@
                         <th class="border border-gray-900 px-2 py-1 uppercase w-1/4">Codice Lotto</th>
                         <th class="border border-gray-900 px-2 py-1 uppercase w-1/4">Descrizione</th>
                         <th class="border border-gray-900 px-2 py-1 uppercase w-1/4">Data Creazione</th>
-                        <th class="border border-gray-900 px-2 py-1 uppercase w-1/12"></th>
+                        <th class="border border-gray-900 px-2 py-1 uppercase w-1/4">Controlli</th>
                     </tr>
                 </thead>
                 <tbody class="block max-h-[45vh] overflow-y-auto w-full text-white">
@@ -26,8 +26,8 @@
                     <tr class="text-lg">
                         <td class="border border-gray-900 w-1/4 p-5 ">{{$lotto->code_lotto}}</td>
                         <td class="border border-gray-900 w-1/4 px-2 py-1">{{$preassembleds[$loop->index][0]->padre_description}}</td>
-                        <td class="border border-gray-900 w-1/4 px-2 py-1">{{ date_format($lotto->created_at, 'd/m/Y | H:i') }}</td>
-                        <td class="border border-gray-900 w-1/12 px-3"><a href="{{ route('lotto.edit', $lotto->id) }}" class="bg-azure-600 text-black font-bold rounded hover:bg-azure-400 transition p-3 w-full h-full text-center block">Edita</a></td>
+                        <td class="border border-gray-900 w-1/4 px-2 py-1">{{ date_format($lotto->created_at, 'd/m/Y | H:i |') }}</td>
+                        <td class="border border-gray-900 w-1/4 px-3"><a href="{{ route('lotto.edit', $lotto->id) }}" class="bg-green-500 text-black font-bold rounded hover:bg-green-400 transition p-3 my-2 text-center block">Edita</a><a href="{{ route('download.lotto', ['filename' => $lotto->code_lotto . '.pdf']) }}" class="bg-azure-600 text-black font-bold rounded hover:bg-azure-400 transition p-3 my-2 text-center block">Scarica</a></td>
                     </tr>
                     @endforeach
                 </tbody>
@@ -40,8 +40,19 @@
         </div>
     </div>
     @else
-    <div class="">
-            <h2>Al momento non sono stati creati lotti</h2>
+        <div class="max-w-6xl h-fit mx-auto my-0 border border-gray-900 p-4 rounded-lg shadow mt-9 text-white bg-gray-300 shadow-lg absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-9">
+            <div class="text-center">
+                <h2 class="text-4xl font-bold mb-4">Nessun lotto creato oggi</h2>
+                <p class="text-xl">Non sono stati creati lotti per la giornata corrente.</p>
+                <div class="flex justify-center mt-6 space-x-4">
+                    <a href="{{ Auth::user()->role ? route('admin.index') : route('operator.index') }}" class="mt-4 w-1/2 bg-red-600 text-white font-semibold py-2 px-4 rounded hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-opacity-75">
+                        Torna alla home
+                    </a>
+                    <a href="{{ route('select.preassembled') }}" class="mt-4 w-1/2 bg-cyan-600 text-white font-semibold py-2 px-4 rounded hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-opacity-75">
+                        Crea lotto
+                    </a>
+                </div>
+            </div>
         </div>
     @endif
 </x-app-layout>

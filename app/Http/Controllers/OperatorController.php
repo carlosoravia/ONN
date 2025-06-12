@@ -19,7 +19,14 @@ use App\Services\PivotAuditService;
 class OperatorController extends Controller
 {
     public function index(){
-        return view('operator.index');
+        $lottos = Lotto::where('created_at', '>=', date_format(now(), 'Y-m-d'))->get();
+        $lastLotto = Lotto::orderBy('created_at', 'desc')->first();
+        $preassembleds = [];
+        foreach ($lottos as $lotto) {
+            array_push($preassembleds, Preassembled::where('id', $lotto->pre_assembled_id)->first());
+        }
+        $lottosCount = $lottos->count();
+        return view('operator.index', compact('lottos', 'lastLotto', 'lottosCount', 'preassembleds'));
     }
 
     public $lottoCode;

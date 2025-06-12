@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\AuditLog;
 use App\Models\Lotto;
-
+use Illuminate\Support\Facades\DB;
 class AdminController extends Controller
 {
     public function index(){
@@ -27,10 +27,23 @@ class AdminController extends Controller
 
     public function showAuditLogs($id)
     {
+        $lotto = '';
         $audit = AuditLog::findOrFail($id);
         $record = $audit->getTargetRecord();
         $user = $audit->user;
-        $updatedData = $audit->changed_data;
-        return view('admin.show-audit-logs', compact('audit','record', 'user', 'updatedData'));
+        $linkToRecord = $audit->getRecordUrl();
+        if ($audit->table_name === 'lotto_articles' && $audit->action === 'updated') {
+            $lotto = Lotto::find($record->lotto_id);
+            $lottoCode = $lotto->code_lotto;
+        }else if ($audit->table_name === 'lottos') {
+            $lotto = Lotto::find($record->id);
+            $lottoCode = $lotto->code_lotto;
+        } else {
+            $lottoCode = '';
+        }
+        $updatedData = is_string($audit->changed_data)
+            ? json_decode($audit->changed_data, true)
+            : $audit->changed_data;
+        return view('admin.show-audit-logs', compact('audit','record', 'user', 'updatedData', 'lottoCode', 'linkToRecord'));
     }
 }
