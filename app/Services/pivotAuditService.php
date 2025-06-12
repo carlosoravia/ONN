@@ -16,13 +16,13 @@ class PivotAuditService
         ?array $old,
         ?array $new
     ): void {
-        dd("tabella -> " . $table,
-        "lotto id -> " . $lottoId,
-        "related id -> " . $relatedId,
-        "related key name-> " . $relatedKeyName,
-        "field name -> " . $fieldName,
-        "old: ", $old,
-        "new: ", $new);
+        // dd("tabella -> " . $table,
+        // "lotto id -> " . $lottoId,
+        // "related id -> " . $relatedId,
+        // "related key name-> " . $relatedKeyName,
+        // "field name -> " . $fieldName,
+        // "old: ", $old,
+        // "new: ", $new);
         AuditLog::create([
             'user_id'     => Auth::id(),
             'action'      => $old === null ? 'created' : 'updated',
