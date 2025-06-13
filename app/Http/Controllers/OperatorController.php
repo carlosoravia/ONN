@@ -18,8 +18,8 @@ use App\Services\PivotAuditService;
 
 class OperatorController extends Controller
 {
-    public function index(){
-        $lottos = Lotto::where('created_at', '>=', date_format(now(), 'Y-m-d'))->get();
+    public function index(Request $request){
+        $lottos = Lotto::where('created_at', '>=', date_format(now(), 'Y-m-d'))->orderBy('id', 'DESC')->get();
         $lastLotto = Lotto::orderBy('created_at', 'desc')->first();
         $preassembleds = [];
         foreach ($lottos as $lotto) {
@@ -104,7 +104,8 @@ class OperatorController extends Controller
         $preAssembled = Preassembled::where('id', $id)->first();
         foreach ($components as $component) {
             array_push($articles, Article::where('id', $component->article_id)->first());
-            $supplierCodes = LottoArticle::where('id', $component->article_id)->pluck('supplier_code')->toArray();
+            $supplierCodes = LottoArticle::where('article_id', $component->article_id)
+                                 ->pluck('supplier_code')->toArray();
         }
         return view('operator.create-lotto', compact('articles', 'preAssembled', 'lottoCode', 'supplierCodes'));
     }
@@ -115,7 +116,7 @@ class OperatorController extends Controller
         $lottos = Lotto::all();
         if ($lottos->isEmpty()) {
             if(Auth::user()->role === "Admin"){
-                return redirect('')->route('admin.index')
+                return redirect()->route('admin.index')
                 ->with('error', 'Nessun lotto disponibile per la modifica.');
             } else if (Auth::user()->role === "Operator") {
                 return redirect()->route('operator.index')

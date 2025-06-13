@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\Auditable;
+use App\Models\Preassembled;
+
 class Lotto extends Model
 {
     use Auditable;
@@ -16,7 +18,7 @@ class Lotto extends Model
 
     public function preassembly()
     {
-        return $this->belongsTo(Preassembly::class);
+        return $this->belongsTo(Preassembled::class);
     }
 
     public function articles()

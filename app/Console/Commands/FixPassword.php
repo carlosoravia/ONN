@@ -44,8 +44,8 @@ class FixPassword extends Command
 
                 $user->password = Hash::make($user->password);
                 $user->save();
-                $count++;
             }
+            $count++;
         }
         $writer->save($path);
         $this->info("✅ Completato: {$count} utenti aggiornati.");

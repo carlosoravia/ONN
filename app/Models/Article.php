@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\Auditable;
+use App\Models\Preassembled;
 class Article extends Model
 {
     use Auditable;
@@ -11,12 +12,13 @@ class Article extends Model
     protected $fillable = [
         'code',
         'description',
-        'is_moka',
+        'is_moca',
     ];
 
     public function preassemblies()
     {
-        return $this->belongsToMany(Preassembly::class)->withPivot('order')->withTimestamps();
+        return $this->belongsToMany(PreAssembled::class, 'preassembled_articles')
+            ->withPivot('order')->withTimestamps();
     }
 
     public function lottos()

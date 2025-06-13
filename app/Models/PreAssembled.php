@@ -11,13 +11,14 @@ class PreAssembled extends Model
     protected $fillable = [
         'code',
         'description',
-        'parent_description',
+        'padre_description',
         'activity',
     ];
 
     public function articles()
     {
-        return $this->belongsToMany(Article::class)->withPivot('order')->withTimestamps();
+        return $this->belongsToMany(Article::class, 'preassembled_articles')
+            ->withPivot('order')->withTimestamps();
     }
 
     public function lottos()

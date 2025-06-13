@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 class AdminController extends Controller
 {
     public function index(){
-        $audits = AuditLog::all()->sortByDesc('created_at')->take(20);
+        $audits = AuditLog::orderBy('created_at', 'desc')->take(20)->get();
         $lottos = Lotto::where('created_at', '>=', date_format(now(), 'Y-m-d'))->get();
         $lastLotto = Lotto::orderBy('created_at', 'desc')->first();
         $lottosCount = $lottos->count();
