@@ -35,6 +35,6 @@ class StartReady extends Command
         $this->call('view:cache');
 
         $this->info('✅ Laravel ottimizzato. Avvio scheduler...');
-        $this->call('schedule:work');
+        $this->call('schedule:run');
     }
 }
