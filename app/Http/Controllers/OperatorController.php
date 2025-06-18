@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Lotto;
-use App\Models\Preassembled;
+use App\Models\PreAssembled;
 use App\Models\LottoArticle;
 use App\Models\PreassembledArticle;
 use App\Models\Article;
@@ -23,7 +23,7 @@ class OperatorController extends Controller
         $lastLotto = Lotto::orderBy('created_at', 'desc')->first();
         $preassembleds = [];
         foreach ($lottos as $lotto) {
-            array_push($preassembleds, Preassembled::where('id', $lotto->pre_assembled_id)->first());
+            array_push($preassembleds, PreAssembled::where('id', $lotto->pre_assembled_id)->first());
         }
         $lottosCount = $lottos->count();
         return view('operator.index', compact('lottos', 'lastLotto', 'lottosCount', 'preassembleds'));
