@@ -1,10 +1,17 @@
 <x-app-layout>
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="py-6">
+             @if($lastLotto)
             <x-dashboard-header :lottosCount="$lottosCount" :lastLotto="$lastLotto"></x-dashboard-header>
-
+            @else
+            <div class="py-9 mb-6 text-white">
+                <h1 class="text-5xl font-bold mb-2">Benvenuto <span class="text-azure-500">{{ Auth::user()->name }}</span></h1>
+                <div class="mt-6 text-lg">
+                    <p class="text-2xl">Non ci sono abbastanza dati per un resoconto</p>
+                </div>
+            </div>
+            @endif
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Modulo 1 -->
                 <div class="bg-gray2-900 border border-gray-200 rounded-lg shadow p-4">
                     <h2 class="text-xl font-semibold mb-2 text-gray-100">Comandi</h2>
                     <p class="text-gray-100">Sezione comandi rapidi</p>
