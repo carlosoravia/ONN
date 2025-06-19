@@ -20,7 +20,7 @@ class TraceSession extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Traccia le query sulla tabella sessions';
 
     /**
      * Execute the console command.

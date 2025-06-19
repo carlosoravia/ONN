@@ -6,6 +6,7 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use Illuminate\Support\Facades\Log;
 
 class FixPassword extends Command
 {
@@ -21,7 +22,7 @@ class FixPassword extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Processa gli utenti e verifica le password, convertendole in Bcrypt se necessario';
 
     /**
      * Execute the console command.
@@ -37,7 +38,8 @@ class FixPassword extends Command
         $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
         foreach ($users as $user) {
             $sheet->setCellValue('A' . $count, $user->name);
-            $sheet->setCellValue('B' . $count, $user->password);
+            $sheet->setCellValue('B' . $count, $user->operator_code);
+            $sheet->setCellValue('C' . $count, $user->password);
             $info = Hash::info($user->password);
             if ($info['algoName'] !== 'bcrypt') {
                 $this->warn("⚠️  Password non Bcrypt per: {$user->name}");
