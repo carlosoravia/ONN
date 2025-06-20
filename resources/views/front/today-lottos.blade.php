@@ -14,7 +14,7 @@
             <h2 class="text-xl font-bold text-center mb-4 border-y py-2 bg-gray-900 uppercase">Lotti</h2>
             <table class="w-full h-max-content border border-gray-900 text-sm">
                 <thead class="bg-gray-200 text-left block w-full">
-                    <tr class="table w-full table-fixed text-white text-xl">
+                    <tr class="table w-full text-white text-xl table-fixed">
                         <th class="border border-gray-900 px-2 py-1 uppercase w-1/4">Codice Lotto</th>
                         <th class="border border-gray-900 px-2 py-1 uppercase w-1/4">Descrizione</th>
                         <th class="border border-gray-900 px-2 py-1 uppercase w-1/4">Data Creazione</th>
@@ -23,7 +23,7 @@
                 </thead>
                 <tbody class="block max-h-[45vh] overflow-y-auto w-full text-white">
                     @foreach ($lottos as $lotto)
-                    <tr class="text-lg">
+                    <tr class="text-lg table w-full text-center table-fixed">
                         <td class="border border-gray-900 w-1/4 p-5 ">{{$lotto->code_lotto}}</td>
                         <td class="border border-gray-900 w-1/4 px-2 py-1">{{$preassembleds[$loop->index][0]->padre_description}}</td>
                         <td class="border border-gray-900 w-1/4 px-2 py-1">{{ date_format($lotto->created_at, 'd/m/Y | H:i |') }}</td>

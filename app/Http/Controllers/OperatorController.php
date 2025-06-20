@@ -107,7 +107,8 @@ class OperatorController extends Controller
             $supplierCodes = LottoArticle::where('article_id', $component->article_id)
                                  ->pluck('supplier_code')->toArray();
         }
-        return view('operator.create-lotto', compact('articles', 'preAssembled', 'lottoCode', 'supplierCodes'));
+        return view('operator.create-lotto', compact('articles', 'preAssembled', 'lottoCode', 'supplierCodes', 'components'))
+            ->with('lottoCode', $lottoCode);
     }
 
     public function selectLotto(){
