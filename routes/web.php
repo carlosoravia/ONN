@@ -14,7 +14,7 @@ Route::get('/', function () {
 // ROTTE OPERATORE (autenticato)
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/operator-dashboard', [OperatorController::class, 'index'])->name('operator.index');
-    Route::get('/select-pre-assembled', [OperatorController::class, 'selectPreAssembled'])->name('select.preassembled');
+    Route::get('/select-pre-assembled', [FrontController::class, 'selectPreAssembled'])->name('select.preassembled');
     Route::get('/lotto-create/{id}', [OperatorController::class, 'lottoCreate'])->name('lotto.create');
     Route::get('/select-lotto', [OperatorController::class, 'selectLotto'])->name('lotto.show');
     Route::get('/edit-lotto/{id}', [OperatorController::class, 'editLotto'])->name('lotto.edit');

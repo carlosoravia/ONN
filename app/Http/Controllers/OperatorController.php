@@ -91,8 +91,7 @@ class OperatorController extends Controller
     }
 
     public function selectPreAssembled(){
-        $preassembleds = Preassembled::all();
-        return view('operator.select-pre-assembled', compact('preassembleds'));
+        return view('operator.select-pre-assembled');
     }
 
     public function lottoCreate($id, LottoService $lottoService)

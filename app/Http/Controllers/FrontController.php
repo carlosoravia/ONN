@@ -27,4 +27,8 @@ class FrontController extends Controller
 
         return response()->download($filePath);
     }
+
+    public function selectPreAssembled(){
+        return view('operator.select-pre-assembled');
+    }
 }
