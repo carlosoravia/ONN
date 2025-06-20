@@ -25,16 +25,25 @@
                     <td class="border border-gray-900 p-5 ">{{$u->name}}</td>
                     <td class="border border-gray-900 px-2 py-1">{{$u->operator_code}}</td>
                     <td class="border border-gray-900 px-2 py-1 {{ $u->role == 'Admin' ? 'text-green-400' : 'text-white' }}">{{$u->role}}</td>
-                    <td class="border border-gray-900">
-                        <a href="" class="bg-red-600 text-white rounded hover:bg-red-700 transition mx-3 p-3 text-center">
-                            Elimina
-                        </a>
-                        <a href="" class="bg-green-600 text-white rounded hover:bg-green-700 transition mx-3 p-3 text-center">
-                            Rendi Admin
-                        </a>
-                        <a href="" class="bg-blue-600 text-white rounded hover:bg-blue-700 transition mx-3 p-3 text-center w-min">
-                            Rendi Operatore
-                        </a>
+                    <td class="flex justify-between items-center px-3 py-1">
+                        <form action="{{ route('user.delete', $u->id) }}" method="POST" class="">
+                        @csrf
+                            <button type="submit" class="bg-red-600 text-white rounded hover:bg-red-700 transition mx-3 p-3 text-center w-full h-full">
+                                Elimina
+                            </button>
+                        </form>
+                        <form action="{{ route('user.makeAdmin', $u->id) }}" method="POST" class="w-29 h-29">
+                        @csrf
+                            <button type="submit" class="bg-green-600 text-white rounded hover:bg-green-700 transition mx-3 p-3 text-center w-full h-full">
+                                Rendi Admin
+                            </button>
+                        </form>
+                        <form action="{{ route('user.makeOperator', $u->id) }}" method="POST" class="w-29 h-29">
+                        @csrf
+                            <button type="submit" class="bg-blue-600 text-white rounded hover:bg-blue-700 transition mx-3 p-3 text-center w-full h-full">
+                                Rendi Operatore
+                            </button>
+                        </form>
                     </td>
                 </tr>
                 @endforeach

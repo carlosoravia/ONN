@@ -23,10 +23,10 @@
                 </thead>
                 <tbody class="block max-h-[45vh] overflow-y-auto w-full text-white">
                     @foreach ($lottos as $lotto)
-                    <tr class="text-lg table w-full text-center table-fixed">
+                    <tr class="text-lg table w-full text-center table-fixed text-start">
                         <td class="border border-gray-900 w-1/4 p-5 ">{{$lotto->code_lotto}}</td>
-                        <td class="border border-gray-900 w-1/4 px-2 py-1">{{$preassembleds[$loop->index][0]->padre_description}}</td>
-                        <td class="border border-gray-900 w-1/4 px-2 py-1">{{ date_format($lotto->created_at, 'd/m/Y | H:i |') }}</td>
+                        <td class="border border-gray-900 w-1/4 p-5">{{$preassembleds[$loop->index][0]->description}}</td>
+                        <td class="border border-gray-900 w-1/4 p-5">{{ date_format($lotto->created_at, 'd/m/Y | H:i') }}</td>
                         <td class="border border-gray-900 w-1/4 px-3"><a href="{{ route('lotto.edit', $lotto->id) }}" class="bg-green-500 text-black font-bold rounded hover:bg-green-400 transition p-3 my-2 text-center block">Edita</a><a href="{{ route('download.lotto', ['filename' => $lotto->code_lotto . '.pdf']) }}" class="bg-azure-600 text-black font-bold rounded hover:bg-azure-400 transition p-3 my-2 text-center block">Scarica</a></td>
                     </tr>
                     @endforeach

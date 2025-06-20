@@ -46,4 +46,31 @@ class AdminController extends Controller
             : $audit->changed_data;
         return view('admin.show-audit-logs', compact('audit','record', 'user', 'updatedData', 'lottoCode', 'linkToRecord'));
     }
+
+
+
+    public function deleteUser($id)
+    {
+        User::findOrFail($id)->delete();
+        return redirect()->back()->with('success', 'Utente eliminato con successo.');
+    }
+
+    public function makeAdmin($id)
+    {
+        $user = User::findOrFail($id);
+        $user->role = 'admin';
+        $user->save();
+
+        return redirect()->back()->with('success', 'Ruolo impostato su Admin.');
+    }
+
+    public function makeOperator($id)
+    {
+        $user = User::findOrFail($id);
+        $user->role = 'operator';
+        $user->save();
+
+        return redirect()->back()->with('success', 'Ruolo impostato su Operatore.');
+    }
+
 }

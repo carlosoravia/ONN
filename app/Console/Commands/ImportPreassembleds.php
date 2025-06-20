@@ -81,7 +81,7 @@ class ImportPreassembleds extends Command
             if (!isset($struttura[$codePadre])) {
                 $struttura[$codePadre] = [
                     'description' => trim($row['B'] ?? ''),
-                    'padre_description' => trim($row['C'] ?? ''),
+                    'padre_description' => trim($row['F'] ?? ''),
                     'activity' => trim($row['E'] ?? ''),
                     'articoli' => []
                 ];

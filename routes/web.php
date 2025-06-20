@@ -37,6 +37,12 @@ Route::middleware(['auth', AdminAccess::class])->group(function () {
     Route::get('/admin-dashboard', [AdminController::class, 'index'])->name('admin.index');
     Route::get('/edit-users', [AdminController::class, 'editUsers'])->name('admin.editUsers');
     Route::get('/audit-logs/{id}', [AdminController::class, 'showAuditLogs'])->name('admin.auditLog');
+
+    // post routes
+    Route::post('/user/{id}/delete', [AdminController::class, 'deleteUser'])->name('user.delete');
+    Route::post('/user/{id}/make-admin', [AdminController::class, 'makeAdmin'])->name('user.makeAdmin');
+    Route::post('/user/{id}/make-operator', [AdminController::class, 'makeOperator'])->name('user.makeOperator');
+
 });
 
 
