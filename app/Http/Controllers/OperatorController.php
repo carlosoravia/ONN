@@ -90,10 +90,6 @@ class OperatorController extends Controller
         }
     }
 
-    public function selectPreAssembled(){
-        return view('operator.select-pre-assembled');
-    }
-
     public function lottoCreate($id, LottoService $lottoService)
     {
         $articles = [];

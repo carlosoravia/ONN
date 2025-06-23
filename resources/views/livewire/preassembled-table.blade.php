@@ -1,4 +1,4 @@
-<div class="max-w-6xl h-fit mx-auto my-0 border border-gray-300 p-4 rounded shadow m-5">
+<div class="max-w-6xl h-fit mx-auto my-0 border border-gray-800 p-4 rounded shadow mt-7">
     <div class="flex justify-between items-center border-b border-gray-300 pb-2 mb-4">
         <div>
             <p class="text-sm text-white">LISTA PRE-ASSEMBLATI</p>
@@ -8,8 +8,9 @@
         </div>
     </div>
     <h2 class="text-xl font-bold text-center mb-4 border-y py-2 bg-gray-900">PRE-ASSEMBLATI</h2>
-    <input wire:model.live="query" placeholder="Cerca Per Nome..." class="border border-gray-400 focus:text-dark text-dark bg-white px-3 py-1 mt-1 rounded mb-4">
-    <input wire:model.live="queryCode" placeholder="Cerca Per Codice..." class="border border-gray-400 focus:text-dark text-dark bg-white px-3 py-1 mt-1 rounded mb-4">
+    <input wire:model.live.debounce.300ms="query" placeholder="Cerca Per Nome..." class="border border-gray-400 focus:text-dark text-dark bg-white px-3 py-1 mt-1 rounded mb-4">
+    <input wire:model.live.debounce.300ms="queryCode" placeholder="Cerca Per Codice..." class="border border-gray-400 focus:text-dark text-dark bg-white px-3 py-1 mt-1 rounded mb-4">
+    <p wire:loading class="m-3 text-white">ricerca in corso...</p>
     <table class="w-full h-max-content border border-gray-900 text-sm">
         <thead class="bg-gray-200 text-left block w-full">
             <tr class="table w-full table-fixed text-white">
@@ -19,6 +20,11 @@
             </tr>
         </thead>
         <tbody class="block max-h-[55vh] overflow-y-auto w-full">
+            @if ($preassembleds->isEmpty())
+            <tr class="table w-full table-fixed text-white">
+                <td class="border border-gray-300 w-full p-5 text-center text-3xl font-bold" colspan="3">Nessun pre-assemblato trovato</td>
+            </tr>
+            @else
             @foreach ($preassembleds as $p)
             <tr class="table w-full table-fixed text-white">
                 <td class="border border-gray-300 w-2/4 p-5 ">{{$p->description}}</td>
@@ -32,6 +38,7 @@
                 </td>
             </tr>
             @endforeach
+            @endif
         </tbody>
     </table>
     <div class="mt-4 w-full h-max flex justify-start">

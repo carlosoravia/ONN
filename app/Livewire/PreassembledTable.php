@@ -13,6 +13,7 @@ class PreassembledTable extends Component
     public function render()
     {
         if ($this->queryCode) {
+            $this->queryCode = trim($this->queryCode);
             $preassembleds = PreAssembled::query()
             ->when($this->queryCode, function ($queryCode) {
                 $queryCode->where('code', 'like', '%' . $this->queryCode . '%');

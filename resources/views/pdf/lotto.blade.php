@@ -2,44 +2,66 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <style>
+   <style>
         body {
-            font-family: DejaVu Sans, sans-serif;
+            font-family: Figtree, ui-sans-serif, sans-serif;
             font-size: 12px;
             color: #111827;
+            line-height: 1.5;
         }
+
         .title {
             background-color: #1e3a8a;
             color: white;
             text-align: center;
-            padding: 6px;
+            padding: 8px;
             font-weight: bold;
+            font-size: 14px;
+            letter-spacing: 1px;
         }
+
         .section {
-            margin-top: 15px;
-            margin-bottom: 15px;
+            margin-top: 20px;
+            margin-bottom: 20px;
         }
+
         .red {
             color: #dc2626;
             font-weight: bold;
         }
+
         .light {
-            color: #6b7280;
+            color: #4f6592;
         }
+
         table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 11px;
+            border: 1px solid #ccc;
+            table-layout: fixed;
         }
+
         th, td {
-            border: 1px solid #d1d5db;
-            padding: 6px;
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
             vertical-align: top;
+            font-size: 11px;
+            word-wrap: break-word;
         }
+
         th {
             background-color: #f3f4f6;
+            color: #1e293b;
+            font-weight: 600;
+            font-size: 11px;
+        }
+
+        tr:nth-child(even) td {
+            background-color: #f9fafb;
         }
     </style>
+
 </head>
 <body>
 
@@ -66,15 +88,14 @@
                 <th>LOTTO ARTICOLO FORNITORE UTILIZZATO</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody style="border: 1px solid #ccc; padding: 8px; text-align: left; vertical-align: top; font-size: 11px; word-wrap: break-word">
             @foreach($articles as $a)
-                <tr>
-                    <td>{{ $a->description }}</td>
-                    <td>{{ $a->code }}</td>
-                    <td>{{ $supplier_codes[$loop->index] ?? 'N/A' }}</td>
+                <tr style="border: 1px solid #ccc; padding: 8px; text-align: left; vertical-align: top; font-size: 11px; word-wrap: break-word;">
+                    <td style="border: 1px solid #ccc; padding: 8px; text-align: left; vertical-align: top; font-size: 11px; word-wrap: break-word;">{{ $a->description }}</td>
+                    <td style="border: 1px solid #ccc; padding: 8px; text-align: left; vertical-align: top;font-size: 11px; word-wrap: break-word;">{{ $a->code }}</td>
+                    <td style="border: 1px solid #ccc; padding: 8px; text-align: left; vertical-align: top;font-size: 11px; word-wrap: break-word;">{{ $supplier_codes[$loop->index] ?? 'N/A' }}</td>
                 </tr>
             @endforeach
-            <p>TOTALE ARTICOLI: {{ count($articles) }}</p>
         </tbody>
     </table>
 
