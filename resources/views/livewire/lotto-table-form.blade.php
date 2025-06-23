@@ -17,7 +17,7 @@
                 <p class="text-azure-500">
                     LOTTO N°:
                     <span class="text-white">{{$lottoCode}}</span>
-                    <input type="text" wire:model="lotto_code" value="{{$lottoCode}}" class="hidden">
+                    <input type="text" wire:model="code_lotto" value="{{$lottoCode}}" class="hidden">
                 </p>
             </div>
             <div class="flex flex-col items-end">
