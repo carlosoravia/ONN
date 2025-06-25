@@ -37,7 +37,7 @@ class LottosTable extends Component
             $lottos = Lotto::query()
             ->when($this->query, function ($query) {
                 $query->whereHas('preassembled', function ($subQuery) {
-                    $subQuery->where('code', 'like', $this->query . '%');
+                    $subQuery->where('description', 'like', '%' . $this->query . '%');
                 });
             })
             ->get();
