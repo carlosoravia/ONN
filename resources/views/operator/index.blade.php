@@ -18,6 +18,7 @@
                     <div class="mt-4 w-full h-max flex justify-center text-center flex-col gap-3 uppercase font-bold">
                         <x-command-btn href="{{ route('lotto.today') }}">{{ __("Lotti creati in giornata") }}</x-command-btn>
                         <x-command-btn href="{{ route('select.preassembled') }}">{{ __("Crea nuovo lotto") }}</x-command-btn>
+                        <x-command-btn href="{{ route('front.show-all-lottos') }}">{{ __("Vedi tutti i lotti") }}</x-command-btn>
                     </div>
                 </div>
                 <div class="bg-gray2-900 border border-gray-200 rounded-lg shadow p-4">
