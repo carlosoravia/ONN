@@ -31,4 +31,8 @@ class FrontController extends Controller
     public function selectPreAssembled(){
         return view('operator.select-pre-assembled');
     }
+
+    public function showAllLottos(){
+        return view('front.all-lottos');
+    }
 }

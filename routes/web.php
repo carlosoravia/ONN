@@ -30,6 +30,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/today-lottos', [FrontController::class, 'showTodayLottos'])->name('lotto.today');
     Route::get('/download/{filename}', [FrontController::class, 'downloadLotto'])->name('download.lotto');
+    Route::get('/show-all-lottos', [FrontController::class, 'showAllLottos'])->name('front.show-all-lottos');
 });
 
 // ROTTE ADMIN (autenticato + controllo ruolo)

@@ -16,9 +16,9 @@ class Lotto extends Model
         'quantity',
     ];
 
-    public function preassembly()
+    public function preassembled()
     {
-        return $this->belongsTo(Preassembled::class);
+        return $this->belongsTo(Preassembled::class, 'pre_assembled_id');
     }
 
     public function articles()
