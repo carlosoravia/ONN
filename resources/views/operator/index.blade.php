@@ -22,6 +22,13 @@
                     </div>
                 </div>
                 <div class="bg-gray2-900 border border-gray-200 rounded-lg shadow p-4">
+                    @if($lottos->isEmpty())
+                    {{-- RIPRENDi --}}
+                    <div class="text">
+                        <h2 class="text-xl font-semibold mb-2 text-gray-100">Non sono stati ancora creati lotti in giornata</h2>
+                        <p class="text-gray-100">Quando verrà creato un lotto nella giornata di oggi lo vedrai qui per velocizzare eventuali modifiche o controlli</p>
+                    </div>
+                    @else
                     <h2 class="text-xl font-semibold mb-2 text-gray-100">Ultimi lotti creati</h2>
                     <p class="text-gray-100">Vedi gli ultimi lotti creati e editali se serve</p>
                     <div class="h-[35vh] overflow-y-auto block mt-4 px-2 border border-gray-400 rounded-lg">
@@ -46,6 +53,7 @@
                             </tbody>
                         </table>
                     </div>
+                    @endif
                 </div>
                 <!-- Modulo 3 -->
                 <div class="bg-gray2-900 border border-gray-200 rounded-lg shadow p-4 md:col-span-2">
