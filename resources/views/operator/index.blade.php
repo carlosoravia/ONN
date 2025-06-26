@@ -44,7 +44,7 @@
                                 @foreach ($lottos as $lotto)
                                     <tr class="bg-gray-900 border-b border-gray-600 table w-full table-fixed mb-2 shadow">
                                         <td class="px-4 py-2 text-gray-300 text-start">{{ $lotto->code_lotto }}</td>
-                                        <td class="px-4 py-2 text-gray-300 text-start">{{ $preassembleds[$loop->index]->padre_description }}</td>
+                                        <td class="px-4 py-2 text-gray-300 text-start">{{ $preassembleds[$loop->index]->description }}</td>
                                         <td class="px-4 py-2 text-gray-300 text-start">
                                             <a href="{{ route('lotto.edit', $lotto->id) }}" class="bg-azure-300 text-white font-bold rounded hover:bg-azure-400 transition p-3 w-full h-full text-center block">Edita</a>
                                         </td>

@@ -30,7 +30,7 @@ class LottosTable extends Component
             $lottos = Lotto::query()
             ->when($this->queryCode, function ($queryCode) {
                 $queryCode->where('code_lotto', 'like', '%' . $this->queryCode . '%');
-            })
+            })->orderBy('id', 'desc')
             ->get();
             $preassembleds = $this->processData($lottos);
         }else if ($this->query) {
@@ -39,18 +39,16 @@ class LottosTable extends Component
                 $query->whereHas('preassembled', function ($subQuery) {
                     $subQuery->where('description', 'like', '%' . $this->query . '%');
                 });
-            })
+            })->orderBy('id', 'desc')
             ->get();
             $preassembleds = $this->processData($lottos);
         }else if ($this->queryDate) {
-            $lottos = Lotto::query()
-            ->when($this->query, function ($query) {
-                $query->where('created_at', 'like', '%' . $this->query . '%');
-            })
-            ->get();
+            $lottos = Lotto::whereRaw('DAY(created_at) = ?', [$this->queryDate])
+                ->orderBy('id', 'desc')
+                ->get();
             $preassembleds = $this->processData($lottos);
         } else {
-            $lottos = Lotto::all();
+            $lottos = Lotto::orderBy('id', 'desc')->get();
             $preassembleds = $this->processData($lottos);
         }
         return view('livewire.lottos-table', compact('lottos', 'preassembleds'));

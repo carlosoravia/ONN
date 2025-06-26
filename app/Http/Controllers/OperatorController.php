@@ -13,7 +13,6 @@ use App\Models\AuditLog;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Services\GenerateLottoNumberService as LottoService;
 use App\Services\AuditLogService;
-use App\Services\PivotAuditService;
 
 
 class OperatorController extends Controller

@@ -7,7 +7,7 @@
             <img src="/images/logo_server_2.png" alt="Logo Onn Water" class="h-12 object-contain">
         </div>
     </div>
-    <h2 class="text-xl font-bold text-center mb-4 border-y py-2 bg-gray-900">PRE-ASSEMBLATI</h2>
+    <h2 class="text-xl font-bold text-center mb-4 border-y py-2 bg-gray-900 uppercase">Lotti</h2>
     <input wire:model.live="query" placeholder="Cerca Per Nome..." class="border border-gray-400 focus:text-dark text-dark bg-white px-3 py-1 mt-1 rounded mb-4">
     <input wire:model.live="queryCode" placeholder="Cerca Per Codice..." class="border border-gray-400 focus:text-dark text-dark bg-white px-3 py-1 mt-1 rounded mb-4">
     <input wire:model.live="queryDate" placeholder="Cerca Per Data..." class="border border-gray-400 focus:text-dark text-dark bg-white px-3 py-1 mt-1 rounded mb-4">
