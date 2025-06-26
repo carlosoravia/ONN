@@ -23,6 +23,6 @@ class Lotto extends Model
 
     public function articles()
     {
-        return $this->belongsToMany(Article::class, 'lotto-articles')->withPivot('supplier_code')->withTimestamps();
+        return $this->belongsToMany(Article::class, 'lotto_articles')->withPivot('supplier_code')->withTimestamps();
     }
 }

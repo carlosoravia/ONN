@@ -28,7 +28,7 @@ class AuditLog extends Model
         $map = [
             'lottos' => \App\Models\Lotto::class,
             'users' => \App\Models\User::class,
-            'pre_assembleds' => \App\Models\PreAssemblato::class,
+            'pre_assembleds' => \App\Models\PreAssembled::class,
             'lotto_articles' => \App\Models\LottoArticle::class,
             // aggiungi altri se necessario
         ];

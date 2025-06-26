@@ -35,7 +35,7 @@
         </tbody>
     </table>
     <div class="mt-4 w-full h-max flex justify-start">
-        <a href="{{ Auth::user()->role ? route('admin.index') : route('operator.index') }}" class="bg-red-800 text-white font-semibold py-2 px-4 rounded hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-opacity-75">
+        <a href="{{ Auth::user()->role == 'admin' ? route('admin.index') : route('operator.index') }}" class="bg-red-800 text-white font-semibold py-2 px-4 rounded hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-opacity-75">
             Torna alla home
         </a>
     </div>
