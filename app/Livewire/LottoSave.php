@@ -9,14 +9,14 @@ use App\Models\LottoArticle;
 use App\Models\Preassembled;
 use App\Services\LottoService;
 use Illuminate\Support\Facades\Log;
-
+use App\Services\AuditLogService as AuditLog;
 class LottoSave extends Component
 {
 
-public $lottoCode;
+    public $lottoCode;
+    public $code_lotto;
     public $preAssembled;
     public $pre_assembled_id;
-    public $code_lotto;
     public $quantity;
     public $supplierCodes;
     public $components = [];
@@ -25,8 +25,8 @@ public $lottoCode;
 
     public function mount($preAssembled, $lottoCode, $articles, $components, $lotto = null)
     {
-        $this->preAssembled;
-        $this->pre_assembled_id;
+        $this->preAssembled = $preAssembled;
+        $this->pre_assembled_id = $preAssembled->id;
         $this->code_lotto = $lottoCode;
         $this->articles = $articles;
         $this->lotto = $lotto;
@@ -56,7 +56,7 @@ public $lottoCode;
         $this->validate();
 
         $lotto = Lotto::updateOrCreate(
-            ['code_lotto' => $this->code_lotto],
+            ['code_lotto' => $this->lottoCode],
             [
                 'pre_assembled_id' => $this->pre_assembled_id,
                 'quantity' => $this->quantity,

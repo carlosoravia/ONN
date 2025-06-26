@@ -1,7 +1,7 @@
 <div class="max-w-6xl mx-auto border border-gray-900 p-4 rounded shadow mt-12">
     <form wire:submit.prevent="submit">
-        <input type="hidden" wire:model="pre_assembled_id" value="{{ $preAssembled->id }}">
-        <input type="hidden" wire:model="code_lotto" value="{{ $lottoCode }}">
+        <input type="hidden" wire:model="pre_assembled_id" />
+        <input type="hidden" wire:model="code_lotto" />
         <div class="flex justify-between items-center border-b border-gray-900 pb-2 mb-4 text-white">
             <div>
                 <p class="text-sm">IO 05 – TRACCIABILITÀ LOTTI COMPONENTI (PRE-ASSEMBLATI)</p>
@@ -17,7 +17,6 @@
                 <p class="text-azure-500">
                     LOTTO N°:
                     <span class="text-white">{{$lottoCode}}</span>
-                    <input type="text" wire:model="lotto_code" value="{{$lottoCode}}" class="hidden">
                 </p>
             </div>
             <div class="flex flex-col items-end">
@@ -45,13 +44,13 @@
                     {{-- Check if supplierCodes is set and has the same number of elements as articles --}}
                     @if($supplierCodes)
                     <td class="border border-gray-900" style="color: black !important;">
-                        <input type="hidden" wire:model="components.[{{ $loop->index }}].[article_id]" value="{{ $a->id }}">
-                        <input type="text" wire:model="components.[{{ $loop->index }}].[supplier_code]" value="{{$components.[$loop->index].['supplier_code']}}" class="w-full h-full">
+                        <input type="hidden" wire:model="components.{{ $loop->index }}.article_id" value="{{ $a->id }}">
+                        <input type="text" wire:model="components.{{ $loop->index }}.supplier_code" class="w-full h-full">
                     </td>
                     @else
                     <td class="border border-gray-900" style="color: black !important;">
-                        <input type="hidden" wire:model="components.[{{ $loop->index }}].[article_id]" value="{{ $a->id }}">
-                        <input type="text" wire:model="components.[{{ $loop->index }}].[supplier_code]" class="w-full h-full" placeholder="Codice fornitore">
+                        <input type="hidden" wire:model="components.{{ $loop->index }}.article_id" value="{{ $a->id }}">
+                        <input type="text" wire:model="components.{{ $loop->index }}.supplier_code" class="w-full h-full" placeholder="Codice fornitore">
                     </td>
                     @endif
                 </tr>
