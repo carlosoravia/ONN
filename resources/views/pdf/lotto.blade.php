@@ -71,10 +71,16 @@
                 <tr>
                     <td>{{ $a->description }}</td>
                     <td>{{ $a->code }}</td>
-                    <td>{{ $supplier_codes[$loop->index] ?? 'N/A' }}</td>
+                    <td style="display: flex; flex-direction:row; align-items:center;">
+                        <span>{{ $supplier_codes[$loop->index] ?? 'N/A' }}</span>
+                        <span>
+                            @if($a->is_moca)
+                                <img src="./images/moca_article.png" style="height: 30px; margin: auto;" alt="">
+                            @endif
+                        </span>
+                    </td>
                 </tr>
             @endforeach
-            <p>TOTALE ARTICOLI: {{ count($articles) }}</p>
         </tbody>
     </table>
 

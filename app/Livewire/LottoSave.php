@@ -113,6 +113,8 @@ class LottoSave extends Component
     public function submit()
     {
         try {
+            $this->articles = [];
+            $this->supplierCodes = [];
             $this->resetErrorBag();
             $this->resetValidation();
             $this->validate($this->rules());
@@ -205,7 +207,6 @@ class LottoSave extends Component
                 }
                 $pdf->save($fullPath);
             }
-            session()->flash('success', 'Lotto salvato con successo!');
             return redirect()->route(
                 Auth::user()->role === 'Admin' ? 'admin.index' : 'operator.index'
             )->with('success', 'Lotto salvato con successo');
