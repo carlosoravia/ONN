@@ -93,13 +93,13 @@ class OperatorController extends Controller
         return view('operator.select-pre-assembled');
     }
 
-    public function lottoCreate($id, LottoService $lottoService)
+    public function lottoCreate($lottoId, LottoService $lottoService)
     {
         $articles = [];
         $supplierCodes = [];
         $lottoCode = $lottoService->generaCodiceLotto();
-        $components = PreassembledArticle::where('pre_assembled_id', $id)->get();
-        $preAssembled = Preassembled::where('id', $id)->first();
+        $components = PreassembledArticle::where('pre_assembled_id', $lottoId)->get();
+        $preAssembled = Preassembled::where('id', $lottoId)->first();
         foreach ($components as $component) {
             array_push($articles, Article::where('id', $component->article_id)->first());
             $supplierCodes = LottoArticle::where('article_id', $component->article_id)
@@ -128,14 +128,14 @@ class OperatorController extends Controller
         return view('operator.lottos-show', compact('lottos', 'preassembleds'));
     }
 
-    public function editLotto($id)
+    public function editLotto($lottoId)
     {
         $articles = [];
         $supplierCodes = [];
-        $lotto = Lotto::findOrFail($id);
+        $lotto = Lotto::findOrFail($lottoId);
         $lottoCode = $lotto->code_lotto;
         $preAssembled = Preassembled::findOrFail($lotto->pre_assembled_id);
-        $components = LottoArticle::where('lotto_id', $id)->get();
+        $components = LottoArticle::where('lotto_id', $lottoId)->get();
         foreach ($components as $component) {
             array_push($articles, Article::where('id', $component->article_id)->first());
             array_push($supplierCodes, LottoArticle::where('article_id', $component->article_id)->first());

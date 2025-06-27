@@ -8,5 +8,7 @@ use App\Traits\Auditable;
 class PreassembledArticle extends Model
 {
     use Auditable;
+
+    protected $table = 'preassembled_articles';
 }
 

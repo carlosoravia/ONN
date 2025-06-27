@@ -1,7 +1,7 @@
 <div class="max-w-6xl mx-auto border border-gray-900 p-4 rounded shadow mt-12">
     <form wire:submit.prevent="submit">
-        <input type="hidden" wire:model="pre_assembled_id" />
-        <input type="hidden" wire:model="code_lotto" />
+        <input type="hidden" wire:model.defer="pre_assembled_id" />
+        <input type="hidden" wire:model.defer="code_lotto" />
         <div class="flex justify-between items-center border-b border-gray-900 pb-2 mb-4 text-white">
             <div>
                 <p class="text-sm">IO 05 – TRACCIABILITÀ LOTTI COMPONENTI (PRE-ASSEMBLATI)</p>
@@ -22,9 +22,9 @@
             <div class="flex flex-col items-end">
                 <label for="numberLotto" class="text-azure-500 font-semibold">N° PZ LOTTO:</label>
                 @if(!empty($lotto->quantity))
-                    <input id="numberLotto" value="{{$lotto->quantity}}" wire:model="quantity" type="text" class="border border-gray-400 focus:text-dark text-dark bg-white px-3 py-1 mt-1 w-32 rounded">
+                    <input id="numberLotto" value="{{$lotto->quantity}}" wire:model.defer="quantity" type="text" class="border border-gray-400 focus:text-dark text-dark bg-white px-3 py-1 mt-1 w-32 rounded">
                 @else
-                    <input id="numberLotto" wire:model="quantity" type="text" class="border border-gray-400 focus:text-dark text-dark bg-white px-3 py-1 mt-1 w-32 rounded">
+                    <input id="numberLotto" wire:model.defer="quantity" type="text" class="border border-gray-400 focus:text-dark text-dark bg-white px-3 py-1 mt-1 w-32 rounded">
                 @endif
             </div>
         </div>
@@ -40,17 +40,24 @@
                 @foreach ($articles as $a)
                 <tr>
                     <td class="border border-gray-900 px-2 py-1">{{$a->description}}</td>
-                    <td class="border border-gray-900 px-2 py-1">{{$a->code}}</td>
+                    <td class="border border-gray-900 px-2 py-1">{{$a->code . ' | '. $a->is_moca}}</td>
                     {{-- Check if supplierCodes is set and has the same number of elements as articles --}}
                     @if($supplierCodes)
                     <td class="border border-gray-900" style="color: black !important;">
-                        <input type="hidden" wire:model="components.{{ $loop->index }}.article_id" value="{{ $a->id }}">
-                        <input type="text" wire:model="components.{{ $loop->index }}.supplier_code" class="w-full h-full">
+                        <input type="hidden" wire:model.defer="components.{{ $loop->index }}.article_id" value="{{ $a->id }}">
+                        <input type="text" wire:model.defer="components.{{ $loop->index }}.supplier_code" class="w-full h-full">
                     </td>
                     @else
                     <td class="border border-gray-900" style="color: black !important;">
-                        <input type="hidden" wire:model="components.{{ $loop->index }}.article_id" value="{{ $a->id }}">
-                        <input type="text" wire:model="components.{{ $loop->index }}.supplier_code" class="w-full h-full" placeholder="Codice fornitore">
+                        <input type="hidden" wire:model.defer="components.{{ $loop->index }}.article_id" value="{{ $a->id }}">
+                        <input
+                            type="text"
+                            wire:model.defer="components.{{ $loop->index }}.supplier_code"
+                            class="w-full h-full border border-gray-300 rounded px-2 py-1"
+                        />
+                        @error('code_lotto')
+                            <span class="text-red-500">{{ $message }}</span>
+                        @enderror
                     </td>
                     @endif
                 </tr>
@@ -63,4 +70,15 @@
             </x-primary-button>
         </div>
     </form>
+@if ($errors->any())
+    <div class="bg-red-100 text-red-700 border border-red-400 px-4 py-3 rounded relative mb-4 max-w-xl mx-auto">
+        <strong class="font-bold">Si sono verificati errori:</strong>
+        <ul class="mt-2 list-disc pl-5">
+            @foreach ($errors->all() as $message)
+                <li class="text-sm">{{ $message }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
 </div>
+

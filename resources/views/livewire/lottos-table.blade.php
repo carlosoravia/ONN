@@ -28,7 +28,7 @@
                 <td class="border border-gray-300 w-1/4 px-2 py-1">{{date_format($l->created_at,'d M Y')}}</td>
                 <td class="border border-gray-300 w-1/4 p-0">
                     <div class="flex justify-center items-center h-full px-3">
-                        <a href="{{route('lotto.create', $l->id)}}" class="bg-blue-600 text-white rounded hover:bg-blue-700 transition p-3 w-full h-full text-center">
+                        <a href="{{route('lotto.edit', $l->id)}}" class="bg-blue-600 text-white rounded hover:bg-blue-700 transition p-3 w-full h-full text-center">
                             Seleziona
                         </a>
                     </div>
