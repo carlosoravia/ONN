@@ -40,8 +40,7 @@
                 @foreach ($articles as $a)
                 <tr>
                     <td class="border border-gray-900 px-2 py-1">{{$a->description}}</td>
-                    <td class="border border-gray-900 px-2 py-1">{{$a->code . ' | '. $a->is_moca}}</td>
-                    {{-- Check if supplierCodes is set and has the same number of elements as articles --}}
+                    <td class="border border-gray-900 px-2 py-1">{{$a->code}}</td>
                     @if($supplierCodes)
                     <td class="border border-gray-900" style="color: black !important;">
                         <input type="hidden" wire:model.defer="components.{{ $loop->index }}.article_id" value="{{ $a->id }}">
@@ -71,13 +70,19 @@
         </div>
     </form>
 @if ($errors->any())
-    <div class="bg-red-100 text-red-700 border border-red-400 px-4 py-3 rounded relative mb-4 max-w-xl mx-auto">
-        <strong class="font-bold">Si sono verificati errori:</strong>
-        <ul class="mt-2 list-disc pl-5">
-            @foreach ($errors->all() as $message)
-                <li class="text-sm">{{ $message }}</li>
-            @endforeach
-        </ul>
+    <div id="error-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+        <div class="bg-white rounded-lg shadow-lg p-6 max-w-lg w-full relative">
+            <button onclick="document.getElementById('error-modal').style.display='none'"
+                    class="absolute top-2 right-2 text-xl font-bold text-gray-600 hover:text-red-500">
+                &times;
+            </button>
+            <h2 class="text-xl font-semibold mb-4 text-red-600">Si sono verificati errori:</h2>
+            <ul class="list-disc list-inside text-sm text-red-500">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
     </div>
 @endif
 </div>

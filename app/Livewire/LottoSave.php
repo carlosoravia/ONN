@@ -13,6 +13,7 @@ use App\Models\AuditLog;
 use Illuminate\Support\Facades\Auth;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\PreassembledArticle;
+use App\Services\AuditLogService;
 
 class LottoSave extends Component
 {
@@ -61,6 +62,10 @@ class LottoSave extends Component
             })->toArray();
         }
     }
+    public function getErrorCountProperty()
+    {
+        return count($this->getErrorBag()->all());
+    }
     public function messages()
     {
         $messages = [
@@ -108,8 +113,8 @@ class LottoSave extends Component
     public function submit()
     {
         try {
-            $this->resetErrorBag(); // cancella errori precedenti
-            $this->resetValidation(); // resetta le regole se sono state modificate
+            $this->resetErrorBag();
+            $this->resetValidation();
             $this->validate($this->rules());
             $lotto = Lotto::where('code_lotto', $this->code_lotto)->first();
             if (!$this->lottoId) {
@@ -145,6 +150,7 @@ class LottoSave extends Component
                 $filename = $lotto->code_lotto . '.pdf';
                 $fullPath = $folderPath . DIRECTORY_SEPARATOR . $filename;
                 $pdf->save($fullPath);
+                AuditLogService::log('created', 'creato lotto', $lotto);
             }else{
                 $lotto = Lotto::findOrFail($this->lottoId);
                 $oldSupplierCode = [];
@@ -176,6 +182,28 @@ class LottoSave extends Component
                     'record_id'   => $lotto->id,
                     'changed_data'=> [$oldSupplierCode, $newSupplierCode],
                 ]);
+                $folderPath = storage_path('app/public/lottos');
+                $filename = $lotto->code_lotto . '.pdf';
+                $fullPath = $folderPath . DIRECTORY_SEPARATOR . $filename;
+                if (file_exists($fullPath)) {
+                    unlink($fullPath);
+                }
+                // --- RIGENERA IL PDF ---
+                $pdf = Pdf::loadView('pdf.lotto', [
+                    'lotto' => $lotto,
+                    'components' => $this->components,
+                    'preAssembled' => Preassembled::find($this->pre_assembled_id),
+                    'lottoCode' => $this->code_lotto,
+                    'quantity' => $this->quantity,
+                    'date' => now()->format('d/m/Y'),
+                    'articles' => $this->articles,
+                    'supplier_codes' =>  $this->supplierCodes,
+                ]);
+                if (!file_exists($folderPath)) {
+                    \Log::info("Cartella non trovata, la creo: $folderPath");
+                    mkdir($folderPath, 0777, true);
+                }
+                $pdf->save($fullPath);
             }
             session()->flash('success', 'Lotto salvato con successo!');
             return redirect()->route(
