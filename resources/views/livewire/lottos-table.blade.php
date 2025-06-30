@@ -1,7 +1,7 @@
 <div class="max-w-6xl h-fit mx-auto my-0 border border-gray-300 p-4 rounded shadow m-5">
     <div class="flex justify-between items-center border-b border-gray-300 pb-2 mb-4">
         <div>
-            <p class="text-sm text-white">LISTA PRE-ASSEMBLATI</p>
+            <p class="text-sm text-white uppercase">LISTA LOTTI</p>
         </div>
         <div class="text-right">
             <img src="/images/logo_server_2.png" alt="Logo Onn Water" class="h-12 object-contain">
@@ -21,7 +21,7 @@
             </tr>
         </thead>
         <tbody class="block max-h-[55vh] overflow-y-auto w-full">
-            @foreach ($lottos as $l)
+            @forelse ($lottos as $l)
             <tr class="table w-full table-fixed text-white">
                 <td class="border border-gray-300 w-2/4 p-5 ">{{$preassembleds[$loop->index][0]->description}}</td>
                 <td class="border border-gray-300 w-1/4 px-2 py-1">{{$l->code_lotto}}</td>
@@ -34,7 +34,19 @@
                     </div>
                 </td>
             </tr>
-            @endforeach
+            @empty
+            <tr>
+                <td colspan="4" class="text-center py-4 text-white w-full p-5 text-3xl">
+                    @if ($query)
+                        Nessun lotto presente per la ricerca: {{ $query }}
+                    @elseif($queryDate)
+                        Nessun lotto prensente il giorno: {{ $queryDate }}
+                    @elseif($queryCode)
+                        Nessun lotto trovato con il codice: {{ $queryCode }}
+                    @endif
+                </td>
+            </tr>
+            @endforelse
         </tbody>
     </table>
     <div class="mt-4 w-full h-max flex justify-start">

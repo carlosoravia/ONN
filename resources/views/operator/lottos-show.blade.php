@@ -20,7 +20,7 @@
                     </tr>
                 </thead>
                 <tbody style="overflow-y: auto; height: ;">
-                    @foreach ($lottos as $l)
+                    @forelse ($lottos as $l)
                     <tr>
                         <td class="border border-gray-300 dark:border-gray-600 p-5 ">{{$preassembleds[$loop->index]->padre_description}}</td>
                         <td class="border border-gray-300 dark:border-gray-600 px-2 py-1">{{$l->code_lotto}}</td>
@@ -30,7 +30,13 @@
                             </a>
                         </td>
                     </tr>
-                    @endforeach
+                    @empty
+                    <tr>
+                        <td colspan="3" class="text-center py-4 text-gray-500">
+                            Nessun lotto presente.
+                        </td>
+                    </tr>
+                    @endforelse
                 </tbody>
             </table>
         </form>
