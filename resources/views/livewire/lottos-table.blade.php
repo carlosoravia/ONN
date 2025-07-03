@@ -23,7 +23,7 @@
         <tbody class="block max-h-[55vh] overflow-y-auto w-full">
             @forelse ($lottos as $l)
             <tr class="table w-full table-fixed text-white">
-                <td class="border border-gray-300 w-2/4 p-5 ">{{$preassembleds[$loop->index][0]->description}}</td>
+                <td class="border border-gray-300 w-2/4 p-5 ">{{$l->preassembled->description ?? ''}}</td>
                 <td class="border border-gray-300 w-1/4 px-2 py-1">{{$l->code_lotto}}</td>
                 <td class="border border-gray-300 w-1/4 px-2 py-1">{{date_format($l->created_at,'d M Y')}}</td>
                 <td class="border border-gray-300 w-1/4 p-0">
