@@ -113,11 +113,11 @@ class LottoSave extends Component
     public function submit()
     {
         try {
-            $this->articles = [];
-            $this->supplierCodes = [];
             $this->resetErrorBag();
             $this->resetValidation();
             $this->validate($this->rules());
+            $this->articles = [];
+            $this->supplierCodes = [];
             $lotto = Lotto::where('code_lotto', $this->code_lotto)->first();
             if (!$this->lottoId) {
                 $lotto = Lotto::create([

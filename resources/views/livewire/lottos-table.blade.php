@@ -1,4 +1,4 @@
-<div class="max-w-6xl h-fit mx-auto my-0 border border-gray-300 p-4 rounded shadow m-5">
+<div class="max-w-6xl h-fit mx-auto my-0 border border-gray-900 p-4 rounded shadow mt-5">
     <div class="flex justify-between items-center border-b border-gray-300 pb-2 mb-4">
         <div>
             <p class="text-sm text-white uppercase">LISTA LOTTI</p>
@@ -20,7 +20,7 @@
                 <th class="border border-gray-900 px-2 py-1 uppercase w-1/4"></th>
             </tr>
         </thead>
-        <tbody class="block max-h-[55vh] overflow-y-auto w-full">
+        <tbody class="block max-h-[40vh] overflow-y-auto w-full">
             @forelse ($lottos as $l)
             <tr class="table w-full table-fixed text-white">
                 <td class="border border-gray-300 w-2/4 p-5 ">{{$preassembleds[$loop->index][0]->description}}</td>
@@ -28,7 +28,7 @@
                 <td class="border border-gray-300 w-1/4 px-2 py-1">{{date_format($l->created_at,'d M Y')}}</td>
                 <td class="border border-gray-300 w-1/4 p-0">
                     <div class="flex justify-center items-center h-full px-3">
-                        <a href="{{route('lotto.edit', $l->id)}}" class="bg-blue-600 text-white rounded hover:bg-blue-700 transition p-3 w-full h-full text-center">
+                        <a href="{{route('lotto.edit', $l->id)}}" class="bg-blue-600 text-white rounded hover:text-azure-600 hover:bg-gray-400 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out p-3 w-full h-full text-center">
                             Seleziona
                         </a>
                     </div>
@@ -50,7 +50,7 @@
         </tbody>
     </table>
     <div class="mt-4 w-full h-max flex justify-start">
-        <a href="{{ Auth::user()->role == 'admin' ? route('admin.index') : route('operator.index') }}" class="bg-red-800 text-white font-semibold py-2 px-4 rounded hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-opacity-75">
+        <a href="{{ Auth::user()->role == 'admin' ? route('admin.index') : route('operator.index') }}" class="bg-red-800 text-white font-semibold py-2 px-4 rounded hover:text-azure-600 hover:bg-gray-400 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out">
             Torna alla home
         </a>
     </div>

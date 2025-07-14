@@ -2,10 +2,12 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Controller;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\OperatorController;
 use App\Http\Controllers\FrontController;
 use App\Http\Middleware\AdminAccess;
+use App\Http\Middleware\CheckOperatorCode;
 
 Route::get('/', function () {
     return view('welcome'); // pubblica
@@ -40,11 +42,16 @@ Route::middleware(['auth', AdminAccess::class])->group(function () {
     Route::get('/audit-logs/{id}', [AdminController::class, 'showAuditLogs'])->name('admin.auditLog');
 
     // post routes
+    Route::post('/create-user', [AdminController::class, 'createUser'])->name('admin.createUser');
     Route::post('/user/{id}/delete', [AdminController::class, 'deleteUser'])->name('user.delete');
     Route::post('/user/{id}/make-admin', [AdminController::class, 'makeAdmin'])->name('user.makeAdmin');
     Route::post('/user/{id}/make-operator', [AdminController::class, 'makeOperator'])->name('user.makeOperator');
 
 });
 
+Route::middleware(['auth', CheckOperatorCode::class])->group(function () {
+    Route::get('/bingo-perasso', [ProfileController::class, 'bingo'])->name('bingo');
+    Route::post('/avvia', [ProfileController::class, 'avvia'])->name('bingo.avvia');
+});
 
 require __DIR__.'/auth.php';

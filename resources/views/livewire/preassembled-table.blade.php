@@ -1,5 +1,5 @@
-<div class="max-w-6xl h-fit mx-auto my-0 border border-gray-300 p-4 rounded shadow m-5">
-    <div class="flex justify-between items-center border-b border-gray-300 pb-2 mb-4">
+<div class="max-w-6xl h-fit mx-auto my-0 border border-gray-900 p-4 rounded shadow mt-5">
+    <div class="flex justify-between items-center pb-2 mb-4">
         <div>
             <p class="text-sm text-white">LISTA PRE-ASSEMBLATI</p>
         </div>
@@ -7,7 +7,7 @@
             <img src="/images/logo_server_2.png" alt="Logo Onn Water" class="h-12 object-contain">
         </div>
     </div>
-    <h2 class="text-xl font-bold text-center mb-4 border-y py-2 bg-gray-900">PRE-ASSEMBLATI</h2>
+    <h2 class="text-xl font-bold text-center mb-4 border-y py-2 bg-blue-50">PRE-ASSEMBLATI</h2>
     <input wire:model.live="query" placeholder="Cerca Per Nome..." class="border border-gray-400 focus:text-dark text-dark bg-white px-3 py-1 mt-1 rounded mb-4">
     <input wire:model.live="queryCode" placeholder="Cerca Per Codice..." class="border border-gray-400 focus:text-dark text-dark bg-white px-3 py-1 mt-1 rounded mb-4">
     <table class="w-full h-max-content border border-gray-900 text-sm">
@@ -18,14 +18,14 @@
                 <th class="border border-gray-900 px-2 py-1 uppercase w-1/4"></th>
             </tr>
         </thead>
-        <tbody class="block max-h-[55vh] overflow-y-auto w-full">
+        <tbody class="block max-h-[40vh] overflow-y-auto w-full">
             @foreach ($preassembleds as $p)
             <tr class="table w-full table-fixed text-white">
                 <td class="border border-gray-300 w-2/4 p-5 ">{{$p->description}}</td>
                 <td class="border border-gray-300 w-1/4 px-2 py-1">{{$p->code}}</td>
                 <td class="border border-gray-300 w-1/4 p-0">
                     <div class="flex justify-center items-center h-full px-3">
-                        <a href="{{route('lotto.create', $p->id)}}" class="bg-blue-600 text-white rounded hover:bg-blue-700 transition p-3 w-full h-full text-center">
+                        <a href="{{route('lotto.create', $p->id)}}" class="bg-blue-600 text-white rounded hover:text-azure-600 hover:bg-gray-400 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out p-3 w-full h-full text-center">
                             Seleziona
                         </a>
                     </div>
@@ -35,7 +35,7 @@
         </tbody>
     </table>
     <div class="mt-4 w-full h-max flex justify-start">
-        <a href="{{ Auth::user()->role == 'admin' ? route('admin.index') : route('operator.index') }}" class="bg-red-800 text-white font-semibold py-2 px-4 rounded hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-opacity-75">
+        <a href="{{ Auth::user()->role == 'admin' ? route('admin.index') : route('operator.index') }}" class="bg-red-800 text-white font-semibold py-2 px-4 rounded hover:text-azure-600 hover:bg-gray-400 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out">
             Torna alla home
         </a>
     </div>
