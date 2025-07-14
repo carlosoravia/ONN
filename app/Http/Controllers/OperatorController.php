@@ -17,7 +17,7 @@ use App\Services\AuditLogService;
 
 class OperatorController extends Controller
 {
-    public function index(Request $request){
+    public function index(){
         $lottos = Lotto::where('created_at', '>=', date_format(now(), 'Y-m-d'))->orderBy('id', 'DESC')->get();
         $lastLotto = Lotto::orderBy('created_at', 'desc')->first();
         $preassembleds = [];

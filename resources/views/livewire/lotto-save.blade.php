@@ -1,4 +1,4 @@
-<div class="max-w-6xl mx-auto border border-gray-900 p-4 rounded shadow mt-12">
+<div class="max-w-6xl mx-auto border border-gray-900 p-4 rounded shadow mt-5">
     <form wire:submit.prevent="submit">
         <input type="hidden" wire:model.defer="pre_assembled_id" />
         <input type="hidden" wire:model.defer="code_lotto" />
@@ -30,15 +30,15 @@
         </div>
         <table class="w-full border border-gray-900 text-sm text-white">
             <thead class="bg-gray-200 text-left">
-                <tr>
+                <tr class="table w-full table-fixed text-white">
                     <th class="border border-gray-900 px-2 py-1">ARTICOLO UTILIZZATO<br><span class="text-xs font-normal">(componenti necessari per l'assemblaggio)</span></th>
                     <th class="border border-gray-900 px-2 py-1">CODICE ARTICOLO<br><span class="text-xs">ONN WATER</span></th>
                     <th class="border border-gray-900 px-2 py-1">LOTTO ARTICOLO FORNITORE UTILIZZATO</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody class="block max-h-[40vh] overflow-y-auto w-full">
                 @foreach ($articles as $a)
-                <tr>
+                <tr class="table w-full table-fixed text-white">
                     <td class="border border-gray-900 px-2 py-1">{{$a->description}}</td>
                     <td class="border border-gray-900 px-2 py-1">{{$a->code}}</td>
                     @if($supplierCodes)

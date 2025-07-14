@@ -53,4 +53,20 @@ class ProfileController extends Controller
 
         return Redirect::to('/');
     }
+
+    public function bingo(){
+        return view('var.bingo-perasso');
+    }
+
+    public function avvia()
+    {
+        $path = storage_path('app/python/client.py');
+        $process = Process::path(dirname($path))->run('python3 client.py');
+
+        if ($process->successful()) {
+            return response()->json(['output' => $process->output()]);
+        } else {
+            return response()->json(['error' => $process->errorOutput()], 500);
+        }
+    }
 }

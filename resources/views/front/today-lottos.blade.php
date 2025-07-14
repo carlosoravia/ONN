@@ -45,10 +45,10 @@
                 <h2 class="text-4xl font-bold mb-4">Nessun lotto creato oggi</h2>
                 <p class="text-xl">Non sono stati creati lotti per la giornata corrente.</p>
                 <div class="flex justify-center mt-6 space-x-4">
-                    <a href="{{ Auth::user()->role == 'admin' ? route('admin.index') : route('operator.index') }}" class="mt-4 w-1/2 bg-red-600 text-white font-semibold py-2 px-4 rounded hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-opacity-75">
+                    <a href="{{ Auth::user()->role == 'admin' ? route('admin.index') : route('operator.index') }}" class="mt-4 w-1/2 bg-red-600 text-white font-semibold py-2 px-4 rounded hover:text-azure-600 hover:bg-gray-400 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out">
                         Torna alla home
                     </a>
-                    <a href="{{ route('select.preassembled') }}" class="mt-4 w-1/2 bg-cyan-600 text-white font-semibold py-2 px-4 rounded hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-opacity-75">
+                    <a href="{{ route('select.preassembled') }}" class="mt-4 w-1/2 bg-cyan-600 text-white font-semibold py-2 px-4 rounded hover:text-azure-600 hover:bg-gray-400 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out">
                         Crea lotto
                     </a>
                 </div>

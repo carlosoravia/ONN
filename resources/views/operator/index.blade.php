@@ -46,7 +46,7 @@
                                         <td class="px-4 py-2 text-gray-300 text-start">{{ $lotto->code_lotto }}</td>
                                         <td class="px-4 py-2 text-gray-300 text-start">{{ $preassembleds[$loop->index]->description }}</td>
                                         <td class="px-4 py-2 text-gray-300 text-start">
-                                            <a href="{{ route('lotto.edit', $lotto->id) }}" class="bg-azure-300 text-white font-bold rounded hover:bg-azure-400 transition p-3 w-full h-full text-center block">Edita</a>
+                                            <a href="{{ route('lotto.edit', $lotto->id) }}" class="bg-azure-300 text-white font-bold rounded hover:text-azure-600 hover:bg-gray-400 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out p-3 w-full h-full text-center block">Edita</a>
                                         </td>
                                     </tr>
                                 @endforeach

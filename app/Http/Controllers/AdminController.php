@@ -18,11 +18,7 @@ class AdminController extends Controller
     }
 
     public function editUsers(){
-        $users = User::all();
-        if (empty($users)) {
-            return view('admin.edit-users', ['users' => []]);
-        }
-        return view('admin.edit-users', compact('users'));
+        return view('admin.edit-users');
     }
 
     public function showAuditLogs($id)
@@ -73,4 +69,22 @@ class AdminController extends Controller
         return redirect()->back()->with('success', 'Ruolo impostato su Operatore.');
     }
 
+    public function createUser(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'surname' => 'required|string|max:255',
+            'operator_code' => 'required|integer|unique:users',
+            'password' => 'required|string|min:8',
+            'role' => 'required|in:admin,operator',
+        ]);
+        $fullName = strtoupper($request->name) . ' ' . strtoupper($request->surname);
+        $user = User::create([
+            'name' => $fullName,
+            'operator_code' => $request->operator_code,
+            'password' => bcrypt($request->password),
+            'role' => $request->role,
+        ]);
+        return redirect()->back()->with('success', 'Utente creato con successo.');
+    }
 }

@@ -42,7 +42,7 @@
                                         <td class="px-4 py-2 text-gray-300 text-start w-2/4">{{ date_format($a->created_at, "H:i:s | d/m/Y") }}</td>
                                         <td class="px-4 py-2 text-gray-300 text-start w-1/4">{{ $a->action }}</td>
                                         <td class="px-4 py-2 text-gray-300 text-start w-1/4">{{ $a->user->name }}</td>
-                                        <td class="px-4 py-2 text-gray-300 text-start w-1/4"><a href="{{ route('admin.auditLog', $a->id) }}" class="bg-azure-600 text-black font-bold rounded hover:bg-azure-400 transition p-3 w-full h-full text-center block">Dettagli</a></td>
+                                        <td class="px-4 py-2 text-gray-300 text-start w-1/4"><a href="{{ route('admin.auditLog', $a->id) }}" class="bg-azure-600 text-black font-bold rounded hover:text-azure-600 hover:bg-gray-400 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out p-3 w-full h-full text-center block">Dettagli</a></td>
                                     </tr>
                                 @endforeach
                             </tbody>

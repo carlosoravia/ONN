@@ -7,4 +7,5 @@ return [
     'throttle' => 'Troppi tentativi di accesso. Riprova tra :seconds secondi.',
     'failed' => 'Le credenziali inserite non sono corrette.',
     'password' => 'La password non è valida.',
+    'integer' => 'Il valore deve essere un numero intero.',
 ];
