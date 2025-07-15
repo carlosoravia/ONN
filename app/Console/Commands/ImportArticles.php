@@ -47,8 +47,8 @@ class ImportArticles extends Command
         $intestazioni = array_shift($rows);
 
         foreach ($rows as $row) {
-            $code = trim($row['A'] ?? '');
-            $description = trim($row['B'] ?? '');
+            $code = trim($row['E'] ?? '');
+            $description = trim($row['F'] ?? '');
 
             if ($code) {
                 $articolo = Article::firstOrNew(['code' => $code]);
@@ -71,7 +71,7 @@ class ImportArticles extends Command
         $intestazioni = array_shift($rows);
 
         foreach ($rows as $row) {
-            $code = trim($row['A'] ?? '');
+            $code = trim($row['F'] ?? '');
             $articolo = Article::where('code', $code)->first();
 
             if ($articolo) {

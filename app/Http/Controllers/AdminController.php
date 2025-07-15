@@ -14,6 +14,8 @@ class AdminController extends Controller
         $lottos = Lotto::where('created_at', '>=', date_format(now(), 'Y-m-d'))->get();
         $lastLotto = Lotto::orderBy('created_at', 'desc')->first();
         $lottosCount = $lottos->count();
+        // $articoli = DB::connection('mago')->table('CI_BOM')->get();
+        // dd($articoli);
         return view('admin.index', compact('audits', 'lastLotto', 'lottosCount'));
     }
 

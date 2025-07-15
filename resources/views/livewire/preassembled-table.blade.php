@@ -21,7 +21,7 @@
         <tbody class="block max-h-[40vh] overflow-y-auto w-full">
             @foreach ($preassembleds as $p)
             <tr class="table w-full table-fixed text-white">
-                <td class="border border-gray-300 w-2/4 p-5 ">{{$p->description}}</td>
+                <td class="border border-gray-300 w-2/4 p-5 ">{{$p->padre_description}}</td>
                 <td class="border border-gray-300 w-1/4 px-2 py-1">{{$p->code}}</td>
                 <td class="border border-gray-300 w-1/4 p-0">
                     <div class="flex justify-center items-center h-full px-3">
