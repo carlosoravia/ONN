@@ -33,8 +33,6 @@ class ImportPreassembleds extends Command
     public function handle(): int
     {
         ini_set('memory_limit', '-1');
-        $this->info("\nComando avviato con successo!");
-        Log::debug("[ImportPreassembleds] Comando avviato");
 
         $path = $this->ask('Inserisci il percorso completo del file Excel');
 
@@ -45,14 +43,11 @@ class ImportPreassembleds extends Command
         }
 
         $this->info("\n✅ File trovato: {$path}\n");
-        Log::debug("[ImportPreassembleds] File trovato: {$path}");
 
         try {
             $spreadsheet = IOFactory::load($path);
-            Log::debug("[ImportPreassembleds] Excel caricato con successo");
         } catch (\Throwable $e) {
             $this->error("Errore nel caricamento del file Excel: " . $e->getMessage());
-            Log::error("[ImportPreassembleds] Errore caricamento Excel: " . $e->getMessage());
             return 1;
         }
 
@@ -68,7 +63,7 @@ class ImportPreassembleds extends Command
 
         foreach ($rows as $index => $row) {
             $codePadre = trim($row['A'] ?? '');
-            $codeArticolo = trim($row['G'] ?? '');
+            $codeArticolo = trim($row['E'] ?? '');
 
             if (!$codePadre || !$codeArticolo) {
                 $this->warn("⏭️ Riga $index saltata: codice padre o articolo mancante");
@@ -80,9 +75,9 @@ class ImportPreassembleds extends Command
 
             if (!isset($struttura[$codePadre])) {
                 $struttura[$codePadre] = [
-                    'description' => trim($row['B'] ?? ''),
-                    'padre_description' => trim($row['F'] ?? ''),
-                    'activity' => trim($row['E'] ?? ''),
+                    'description' => trim($row['F'] ?? ''),
+                    'padre_description' => trim($row['B'] ?? ''),
+                    'activity' => '',
                     'articoli' => []
                 ];
             }

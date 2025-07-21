@@ -42,17 +42,17 @@
                     <td class="border border-gray-900 px-2 py-1">{{$a->description}}</td>
                     <td class="border border-gray-900 px-2 py-1">{{$a->code}}</td>
                     @if($supplierCodes)
-                    <td class="border border-gray-900" style="color: black !important;">
+                    <td class="border border-gray-900 px-2 py-1" style="color: black !important; padding: 0px !important;">
                         <input type="hidden" wire:model.defer="components.{{ $loop->index }}.article_id" value="{{ $a->id }}">
-                        <input type="text" wire:model.defer="components.{{ $loop->index }}.supplier_code" class="w-full h-full">
+                        <input type="text" wire:model.defer="components.{{ $loop->index }}.supplier_code" class="w-full h-full border border-gray-300 rounded bg-gray-500 text-white focus:outline-none focus:ring-2 focus:ring-gray-700 focus:border-gray-500">
                     </td>
                     @else
-                    <td class="border border-gray-900" style="color: black !important;">
+                    <td class="border border-gray-900 px-2 py-1" style="color: black !important; padding: 0px !important;">
                         <input type="hidden" wire:model.defer="components.{{ $loop->index }}.article_id" value="{{ $a->id }}">
                         <input
                             type="text"
                             wire:model.defer="components.{{ $loop->index }}.supplier_code"
-                            class="w-full h-full border border-gray-300 rounded px-2 py-1"
+                            class="w-full h-full border border-gray-300 rounded bg-gray-500 text-white focus:outline-none focus:ring-2 focus:ring-gray-700 focus:border-gray-500"
                         />
                         @error('code_lotto')
                             <span class="text-red-500">{{ $message }}</span>
