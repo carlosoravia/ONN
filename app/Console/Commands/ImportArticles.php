@@ -58,7 +58,6 @@ class ImportArticles extends Command
             }
         }
 
-        // Aggiorna is_moca
         if (!file_exists($fileMoca)) {
             $this->error("File MOCA non trovato: $fileMoca");
             return 1;
