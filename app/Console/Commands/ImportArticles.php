@@ -6,7 +6,7 @@ use Illuminate\Console\Command;
 use App\Models\Article;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use Illuminate\Support\Str;
-
+use SimpleXMLElement;
 
 class ImportArticles extends Command
 {
@@ -30,57 +30,53 @@ class ImportArticles extends Command
     public function handle(): int
     {
         ini_set('memory_limit', '-1');
-        $fileArticoli = $this->ask('Inserisci il percorso del file degli articoli');
-        $fileMoca = $this->ask('Inserisci il percorso del file MOCA');
+        $filePath = $this->ask('Inserisci il percorso del file degli articoli');
 
-        // Importa articoli
-        if (!file_exists($fileArticoli)) {
-            $this->error("File articoli non trovato: $fileArticoli");
+        if (!file_exists($filePath)) {
+            $this->error("❌ File non trovato: $filePath");
             return 1;
         }
+        $mocaFilePath = $this->ask('moca_list');
+        $mocaCodes = [];
 
-        $this->info('Importazione articoli in corso...');
-        $spreadsheet = IOFactory::load($fileArticoli);
-        $sheet = $spreadsheet->getActiveSheet();
+        if ($mocaFilePath && file_exists($mocaFilePath)) {
+            $mocaCodes = file($mocaFilePath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+            $this->info("📄 Lista MOCA caricata: " . count($mocaCodes) . " codici");
+        }
 
-        $rows = $sheet->toArray(null, true, true, true);
-        $intestazioni = array_shift($rows);
+        try {
+            $xmlContent = file_get_contents($filePath);
+            $xml = new SimpleXMLElement($xmlContent);
+        } catch (\Throwable $e) {
+            $this->error("❌ Errore nel parsing XML: " . $e->getMessage());
+            return 1;
+        }
+        $this->info("🔍 Totale elementi record trovati: " . count($xml->record));
+        $count = 0;
+        $this->line($xml->record);
+        $isMoca = false;
+        foreach ($xml->record as $record) {
+            if (in_array((string) $record['CodiceComponente'], $mocaCodes)) {
+                $isMoca = true;
+            }
+            try {
+                Article::updateOrCreate(
+                    [
+                        'code' => (string) $record['CodiceComponente'],
+                        'description' => (string) $record['DescCompo'],
+                        'is_moca' => $isMoca
+                    ]
+                );
 
-        foreach ($rows as $row) {
-            $code = trim($row['E'] ?? '');
-            $description = trim($row['F'] ?? '');
-
-            if ($code) {
-                $articolo = Article::firstOrNew(['code' => $code]);
-                $articolo->description = $description;
-                $articolo->save();
-                $this->line("[✔] Articolo importato/aggiornato: $code");
+                $this->line("✅ Articolo importato: " . $record);
+                $count++;
+            } catch (\Throwable $e) {
+                $this->error("❌ Errore articolo " . $record['code'] . ": " . $e->getMessage());
+                Log::error("[ImportArticles] Errore su " . $record['code'] . ": " . $e->getMessage());
             }
         }
 
-        if (!file_exists($fileMoca)) {
-            $this->error("File MOCA non trovato: $fileMoca");
-            return 1;
-        }
-
-        $this->info('Aggiornamento campo is_moca in corso...');
-        $spreadsheet = IOFactory::load($fileMoca);
-        $sheet = $spreadsheet->getActiveSheet();
-        $rows = $sheet->toArray(null, true, true, true);
-        $intestazioni = array_shift($rows);
-
-        foreach ($rows as $row) {
-            $code = trim($row['F'] ?? '');
-            $articolo = Article::where('code', $code)->first();
-
-            if ($articolo) {
-                $articolo->is_moca = 1;
-                $articolo->save();
-                $this->line("[✔] MOCA aggiornato: $code");
-            }
-        }
-
-        $this->info('Importazione completata con successo.');
+        $this->info("🔧 Totale articoli importati: $count");
         return 0;
     }
 }

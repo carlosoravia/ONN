@@ -34,66 +34,48 @@ class ImportPreassembleds extends Command
     {
         ini_set('memory_limit', '-1');
 
-        $path = $this->ask('Inserisci il percorso completo del file Excel');
+        $filePath = $this->argument('file');
 
-        if (!file_exists($path)) {
-            $this->error("\n❌ File non trovato: {$path}");
-            Log::error("[ImportPreassembleds] File non trovato: {$path}");
+        if (!file_exists($filePath)) {
+            $this->error("❌ File non trovato: $filePath");
             return 1;
         }
 
-        $this->info("\n✅ File trovato: {$path}\n");
-
-        try {
-            $spreadsheet = IOFactory::load($path);
-        } catch (\Throwable $e) {
-            $this->error("Errore nel caricamento del file Excel: " . $e->getMessage());
-            return 1;
-        }
-
-        $sheet = $spreadsheet->getActiveSheet();
-        $rows = $sheet->toArray(null, true, true, true);
-
-        Log::debug("[ImportPreassembleds] Numero righe caricate: " . count($rows));
-        $this->info("\n📥 Righe totali nel foglio: " . count($rows));
-
-        array_shift($rows); // rimuove intestazione
+        $xmlContent = file_get_contents($filePath);
+        $xml = new SimpleXMLElement($xmlContent);
 
         $struttura = [];
+        $index = 0;
 
-        foreach ($rows as $index => $row) {
-            $codePadre = trim($row['A'] ?? '');
-            $codeArticolo = trim($row['E'] ?? '');
+        foreach ($xml->record as $record) {
+            $index++;
+
+            $codePadre = trim((string) $record['CodicePadre']);
+            $codeArticolo = trim((string) $record['CodiceComponente']);
 
             if (!$codePadre || !$codeArticolo) {
-                $this->warn("⏭️ Riga $index saltata: codice padre o articolo mancante");
-                Log::debug("[RIGA SALTATA] Index $index - Padre: '$codePadre', Articolo: '$codeArticolo'");
+                $this->warn("⏭️ Riga $index saltata: codice padre o componente mancante");
                 continue;
             }
 
-            $this->line("📄 Riga $index - Padre: $codePadre, Articolo: $codeArticolo");
-
             if (!isset($struttura[$codePadre])) {
                 $struttura[$codePadre] = [
-                    'description' => trim($row['F'] ?? ''),
-                    'padre_description' => trim($row['B'] ?? ''),
+                    'description' => trim((string) $record['DescPadre']),
+                    'padre_description' => trim((string) $record['DescPadre']),
                     'activity' => '',
                     'articoli' => []
                 ];
             }
 
-            $struttura[$codePadre]['articoli'][$codeArticolo] = trim($row['H'] ?? '-');
+            $struttura[$codePadre]['articoli'][$codeArticolo] = [
+                'description' => trim((string) $record['DescCompo']),
+                'qty' => floatval((string) $record['Qta']) ?: 1.0
+            ];
         }
 
         Log::debug("[ImportPreassembleds] Struttura costruita: " . json_encode($struttura));
-        $this->info("\n🧱 Riepilogo struttura dati:");
-        foreach ($struttura as $padre => $info) {
-            $this->line("🔧 {$padre} - {$info['description']} ({$info['activity']})");
-            foreach ($info['articoli'] as $artCode => $desc) {
-                $this->line("   ↪️ $artCode - $desc");
-            }
-        }
 
+        $this->info("🧱 Importazione preassemblati:");
         $associati = 0;
 
         foreach ($struttura as $codice => $info) {
@@ -108,30 +90,30 @@ class ImportPreassembleds extends Command
                 );
 
                 $this->line("✅ Preassemblato: {$preassembled->code}");
-                Log::info("[ImportPreassembleds] Preassemblato: {$preassembled->code}");
 
-                foreach ($info['articoli'] as $code => $descrizione) {
+                foreach ($info['articoli'] as $code => $articolo) {
                     $article = Article::firstOrCreate(
                         ['code' => $code],
-                        ['description' => $descrizione]
+                        ['description' => $articolo['description']]
                     );
 
                     $exists = $preassembled->articles()->where('article_id', $article->id)->exists();
                     if (!$exists) {
-                        $preassembled->articles()->attach($article->id);
-                        $this->line("   ↳ Articolo collegato: {$article->code} → {$preassembled->code}");
+                        $preassembled->articles()->attach($article->id, ['qty' => $articolo['qty']]);
+                        $this->line("   ↳ Articolo collegato: {$article->code} (qty: {$articolo['qty']})");
                         $associati++;
                     } else {
                         $this->line("   ⏭️ Articolo già collegato: {$article->code}");
                     }
                 }
+
             } catch (\Throwable $e) {
-                $this->error("❌ Errore durante l'importazione del preassemblato {$codice}: " . $e->getMessage());
-                Log::error("[ImportPreassembleds] Errore preassemblato {$codice}: " . $e->getMessage());
+                $this->error("❌ Errore su preassemblato $codice: " . $e->getMessage());
+                Log::error("[ImportPreassembleds] Errore $codice: " . $e->getMessage());
             }
         }
 
-        $this->info("\n✅ Importazione completata con successo. Articoli associati: {$associati}");
+        $this->info("🔗 Totale collegamenti articoli/preassemblati effettuati: $associati");
         return 0;
     }
 }
