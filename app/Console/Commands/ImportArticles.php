@@ -4,8 +4,6 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\Models\Article;
-use PhpOffice\PhpSpreadsheet\IOFactory;
-use Illuminate\Support\Str;
 use SimpleXMLElement;
 
 class ImportArticles extends Command
@@ -30,13 +28,14 @@ class ImportArticles extends Command
     public function handle(): int
     {
         ini_set('memory_limit', '-1');
-        $filePath = $this->ask('Inserisci il percorso del file degli articoli');
+
+        $filePath = "/var/backups/mago/estrazione-mago.xml";
+        $mocaFilePath = "/var/backups/mago/moca_list.txt";
 
         if (!file_exists($filePath)) {
             $this->error("❌ File non trovato: $filePath");
             return 1;
         }
-        $mocaFilePath = $this->ask('moca_list');
         $mocaCodes = [];
 
         if ($mocaFilePath && file_exists($mocaFilePath)) {
