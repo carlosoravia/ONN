@@ -35,12 +35,12 @@
                 <button class="text-xl font-bold ml-4 messageBtn">×</button>
             </div>
         @endif
-        <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0">
+        <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 animate">
             <div>
                 <x-application-logo class="h-40 bg-center text-dark-500" />
             </div>
 
-            <div class="w-full sm:max-w-md mt-6 px-6 py-4 overflow-hidden sm:rounded-lg animate">
+            <div class="w-full sm:max-w-md mt-6 px-6 py-4 overflow-hidden sm:rounded-lg">
                 {{ $slot }}
             </div>
         </div>

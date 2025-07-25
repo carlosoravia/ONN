@@ -4,6 +4,7 @@
 
 ### Runtime (`require`)
 - **barryvdh/laravel-dompdf**: PDF da HTML (Dompdf)
+- **spatie/browsershot**: PDF da HTML (browsershot)
 - **laravel/nightwatch**: Test E2E via browser
 - **laravel/tinker**: REPL interattivo
 - **livewire/livewire**: Reactive components server-side
