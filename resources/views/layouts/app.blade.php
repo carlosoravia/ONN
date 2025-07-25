@@ -38,7 +38,7 @@
                 </div>
             @endif
 
-            <main>
+            <main class="animate">
                 {{ $slot }}
             </main>
         </div>

@@ -52,30 +52,59 @@ class ImportArticles extends Command
         }
         $this->info("🔍 Totale elementi record trovati: " . count($xml->record));
         $count = 0;
-        $this->line($xml->record);
-        $isMoca = false;
-        foreach ($xml->record as $record) {
-            if (in_array((string) $record['CodiceComponente'], $mocaCodes)) {
-                $isMoca = true;
+        $mocaCodes = array_map('trim', file($mocaFilePath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES));
+
+        // Prendiamo tutti i codici reali nel DB
+        $dbCodes = Article::pluck('code')->map(fn($code) => strtoupper(trim($code)));
+
+        // Normalizza anche i codici MOCA per sicurezza
+        $mocaCodesNormalized = collect($mocaCodes)
+            ->map(fn($code) => strtoupper(trim($code)))
+            ->unique();
+
+        // Verifica i codici presenti
+        $missingCodes = $mocaCodesNormalized->diff($dbCodes);
+
+        // Stampa il risultato
+        if ($missingCodes->isNotEmpty()) {
+            $this->warn('⚠️ Alcuni codici MOCA non esistono nel DB:');
+            foreach ($missingCodes as $missingCode) {
+                //$this->line("- {$missingCode}");
             }
+            $this->info("Totale codici non trovati nel DB: " . $missingCodes->count());
+        } else {
+            $this->info("✅ Tutti i codici MOCA trovati nel DB.");
+        }
+
+        $mocaMatches = 0;
+
+        foreach ($xml->record as $record) {
+            $code = trim((string) $record['CodiceComponente']);
+            $isMoca = in_array($code, $mocaCodes, true);
+
+            if ($isMoca) {
+                //$this->line("✅ Codice MOCA trovato: $code");
+                $mocaMatches++;
+            }else{
+                $this->line('');
+            }
+
             try {
                 Article::updateOrCreate(
+                    ['code' => $code],
                     [
-                        'code' => (string) $record['CodiceComponente'],
                         'description' => (string) $record['DescCompo'],
-                        'is_moca' => $isMoca
+                        'is_moca' => $isMoca,
                     ]
                 );
-
-                $this->line("✅ Articolo importato: " . $record);
                 $count++;
             } catch (\Throwable $e) {
-                $this->error("❌ Errore articolo " . $record['code'] . ": " . $e->getMessage());
-                Log::error("[ImportArticles] Errore su " . $record['code'] . ": " . $e->getMessage());
+                //$this->error("❌ Errore salvataggio: " . $e->getMessage());
             }
         }
 
-        $this->info("🔧 Totale articoli importati: $count");
+        $this->info("🎯 Totale articoli MOCA trovati: $mocaMatches");
+        $this->info("🟢 Totale articoli elaborati: $count");
         return 0;
     }
 }
