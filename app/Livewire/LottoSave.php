@@ -40,7 +40,6 @@ class LottoSave extends Component
         $this->quantity = $lotto->quantity ?? null;
 
         if ($lotto && isset($lotto->id)) {
-            // UPDATE: carica componenti dal DB
             $this->lottoId = $lotto->id;
             $this->components = LottoArticle::where('lotto_id', $lotto->id)
                 ->get()
@@ -51,7 +50,6 @@ class LottoSave extends Component
                     ];
                 })->toArray();
         } else {
-            // CREATE: usa i componenti passati
             $this->components = collect($components)->map(function ($component) use ($supplierCodes) {
                 $articleId = $component->article_id;
                 $supplierCode = $supplierCodes[$articleId]['supplier_code'] ?? null;
@@ -109,6 +107,7 @@ class LottoSave extends Component
 
         return $rules;
     }
+
 
     public function submit()
     {
@@ -175,7 +174,8 @@ class LottoSave extends Component
                             'supplier_code' => $component['supplier_code'] ?? null,
                         ]
                     );
-                    array_push($newSupplierCode, $component['supplier_code']);
+                    array_push($this->articles, Article::where('id', $component['article_id'])->first());
+                    array_push($this->supplierCodes, $component['supplier_code']);
                 }
                 AuditLog::create([
                     'user_id'     => Auth::id(),

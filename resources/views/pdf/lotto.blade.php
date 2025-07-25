@@ -32,12 +32,16 @@
             font-size: 11px;
         }
         th, td {
-            border: 1px solid #d1d5db;
+            border-top: 1px solid #d1d5db;
             padding: 6px;
             vertical-align: top;
         }
         th {
             background-color: #f3f4f6;
+        }
+                table td, table th {
+            word-wrap: break-word;
+            max-width: 200px;
         }
     </style>
 </head>
@@ -72,7 +76,7 @@
                     <td>{{ $a->description }}</td>
                     <td>{{ $a->code }}</td>
                     <td style="display: flex; flex-direction:row; align-items:center;">
-                        <span>{{ $supplier_codes[$loop->index] ?? 'N/A' }}</span>
+                        <span>{{ $supplier_codes[$loop->index] ?? 'Nessun codice associato' }}</span>
                         <span>
                             @if($a->is_moca)
                                 <img src="./images/moca_article.png" style="height: 30px; margin: auto;" alt="">
