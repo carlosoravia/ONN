@@ -17,7 +17,10 @@
             <input id="is_moca_check" wire:model.live="queryMoca" type="checkbox" class="border border-gray-400 w-5 h-5 rounded">
         </div>
     </div>
-    <table class="w-full h-max-content border border-gray-900 text-sm">
+    <div class="h-[32vh] w-full mt-20" wire:loading>
+        <x-loader size="12" color="azure-500" message="Caricamento articoli..." />
+    </div>
+    <table class="w-full h-max-content border border-gray-900 text-sm overflow-hidden" wire:loading.remove>
         <thead class="bg-gray-200 text-left text-white">
             <tr class="table w-full table-fixed">
                 <th class="border border-gray-900 px-2 py-1 uppercase w-1/4">Codice</th>
@@ -26,7 +29,7 @@
                 <th class="border border-gray-900 px-2 py-1 uppercase w-1/4">Controlli</th>
             </tr>
         </thead>
-        <tbody class="block max-h-[40vh] overflow-y-auto w-full text-white">
+        <tbody class="block max-h-[39vh] overflow-y-auto w-full text-white">
             @forelse ($articles as $a)
             <tr class="table w-full table-fixed">
                 <td class="border border-gray-900 w-1/4 p-5 ">{{$a->code}}</td>
