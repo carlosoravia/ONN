@@ -54,7 +54,8 @@ class AdminController extends Controller
 
     public function deleteUser($id)
     {
-        User::findOrFail($id)->delete();
+        $user = User::findOrFail($id)->delete();
+        AuditLogService::log('deleted', 'elimato utente', $user);
         return redirect()->back()->with('success', 'Utente eliminato con successo.');
     }
 
@@ -63,6 +64,7 @@ class AdminController extends Controller
         $user = User::findOrFail($id);
         $user->role = 'admin';
         $user->save();
+        AuditLogService::log('chanced role', 'cambiato permessi utente', $user);
 
         return redirect()->back()->with('success', 'Ruolo impostato su Admin.');
     }
@@ -72,7 +74,7 @@ class AdminController extends Controller
         $user = User::findOrFail($id);
         $user->role = 'operator';
         $user->save();
-
+        AuditLogService::log('chanced role', 'cambiato permessi utente', $user);
         return redirect()->back()->with('success', 'Ruolo impostato su Operatore.');
     }
 
@@ -92,6 +94,7 @@ class AdminController extends Controller
             'password' => bcrypt($request->password),
             'role' => $request->role,
         ]);
+        AuditLogService::log('created', 'creato utente', $user);
         return redirect()->back()->with('success', 'Utente creato con successo.');
     }
 
@@ -110,18 +113,22 @@ class AdminController extends Controller
         $article->description = $request->description;
         $article->padre_description = $request->padre_description;
         $article->is_moca = $request->is_moca;
+        $article->save();
+        AuditLogService::log('edited', 'Cambiato articolo', $article);
         return redirect()->back()->with('success', 'Articolo aggiornato con successo.');
     }
 
     public function deleteArticle($id){
         $article = Article::findOrFail($id);
         $article->delete();
+        AuditLogService::log('deleted', 'elimato articolo', $article);
         return redirect()->back()->with('success', 'Articolo eliminato con successo.');
     }
     public function updateArticle($id){
         $article = Article::findOrFail($id);
         $article->is_moca = !$article->is_moca;
         $article->save();
+        AuditLogService::log('updated', 'modificato articolo', $article);
         return redirect()->back()->with('success', 'Articolo aggiornato con successo.');
     }
     public function createArticle(Request $request){
@@ -143,6 +150,7 @@ class AdminController extends Controller
             'padre_description' => $request->padre_description,
             'is_moca' => $request->is_moca,
         ]);
+        AuditLogService::log('created', 'creato articolo', $article);
         return redirect()->back()->with('success', 'Articolo creato con successo.');
     }
 
