@@ -21,6 +21,7 @@
                         <x-command-btn href="{{ route('lotto.today') }}">{{ __("Lotti creati in giornata") }}</x-command-btn>
                         <x-command-btn href="{{ route('admin.editUsers') }}">{{ __("Edita utenti") }}</x-command-btn>
                         <x-command-btn href="{{ route('front.show-all-lottos') }}">{{ __("Storico lotti") }}</x-command-btn>
+                        <x-command-btn href="{{ route('admin.editArticles') }}">{{ __("Edita articoli") }}</x-command-btn>
                     </div>
                 </div>
                 <div class="bg-gray2-900 border border-gray-200 rounded-lg shadow p-4">

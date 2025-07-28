@@ -39,6 +39,7 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth', AdminAccess::class])->group(function () {
     Route::get('/admin-dashboard', [AdminController::class, 'index'])->name('admin.index');
     Route::get('/edit-users', [AdminController::class, 'editUsers'])->name('admin.editUsers');
+    Route::get('/edit-articles', [AdminController::class, 'showArticles'])->name('admin.editArticles');
     Route::get('/audit-logs/{id}', [AdminController::class, 'showAuditLogs'])->name('admin.auditLog');
 
     // post routes
@@ -46,6 +47,10 @@ Route::middleware(['auth', AdminAccess::class])->group(function () {
     Route::post('/user/{id}/delete', [AdminController::class, 'deleteUser'])->name('user.delete');
     Route::post('/user/{id}/make-admin', [AdminController::class, 'makeAdmin'])->name('user.makeAdmin');
     Route::post('/user/{id}/make-operator', [AdminController::class, 'makeOperator'])->name('user.makeOperator');
+
+    Route::post('/create-article', [AdminController::class, 'createArticle'])->name('article.create');
+    Route::post('/article/{id}/delete', [AdminController::class, 'deleteArticle'])->name('article.delete');
+    Route::post('/article/{id}/make-moca', [AdminController::class, 'updateArticle'])->name('article.update');
 
 });
 
