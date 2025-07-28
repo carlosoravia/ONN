@@ -9,8 +9,14 @@
         </div>
     </div>
     <h2 class="text-xl font-bold text-center mb-4 border-y py-2 bg-blue-50 uppercase">Articoli</h2>
-    <input wire:model.live="query" placeholder="Cerca Per Nome..." class="border border-gray-400 focus:text-dark text-dark bg-white px-3 py-1 mt-1 rounded mb-4">
-    <input wire:model.live="queryDescription" placeholder="Cerca Per Codice..." class="border border-gray-400 focus:text-dark text-dark bg-white px-3 py-1 mt-1 rounded mb-4">
+    <div class="">
+        <input wire:model.live="query" placeholder="Cerca Per Codice..." class="h-[80%] border border-gray-400 focus:text-dark text-dark bg-white px-3 py-1 mt-1 rounded mb-4">
+        <input wire:model.live="queryDescription" placeholder="Cerca in descrizione..." class="h-[80%] border border-gray-400 focus:text-dark text-dark bg-white px-3 py-1 mt-1 rounded mb-4">
+        <div class="mb-4 items-center w-full">
+            <label for="is_moca_check" class="text-white">Solo moca</label>
+            <input id="is_moca_check" wire:model.live="queryMoca" type="checkbox" class="border border-gray-400 w-5 h-5 rounded">
+        </div>
+    </div>
     <table class="w-full h-max-content border border-gray-900 text-sm">
         <thead class="bg-gray-200 text-left text-white">
             <tr class="table w-full table-fixed">

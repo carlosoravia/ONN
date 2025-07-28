@@ -143,5 +143,4 @@ class AdminController extends Controller
         ]);
         return redirect()->back()->with('success', 'Articolo creato con successo.');
     }
-
 }
