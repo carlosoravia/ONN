@@ -51,7 +51,7 @@ class AuditLog extends Model
             },
 
             'lottos' => fn($id) => route('lotto.edit', $id),
-            // 'users' => fn($id) => route('users.show', $id),
+            //'users' => fn($id) => route('users.delete', $id),
             // 'pre_assembleds' => fn($id) => route('pre_assembleds.show', $id),
         ];
 

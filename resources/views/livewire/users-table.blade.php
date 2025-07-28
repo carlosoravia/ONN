@@ -27,7 +27,7 @@
                 <td class="border border-gray-900 w-1/4 px-2 py-1">{{$u->operator_code}}</td>
                 <td class="border border-gray-900 w-1/4 px-2 py-1 {{ $u->role == 'Admin' ? 'text-green-400' : 'text-white' }}">{{$u->role}}</td>
                 <td class="grid grid-cols-2 place-items-center px-3 py-1 w-fit">
-                    @if ($u->role == 'Admin')
+                    @if ($u->role === 'Admin')
                         <form action="{{ route('user.makeOperator', $u->id) }}" method="POST" class="mx-3 inline">
                         @csrf
                             <button type="submit" class="bg-blue-600 text-white rounded hover:text-azure-600 hover:bg-gray-400 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out p-3 text-center">
