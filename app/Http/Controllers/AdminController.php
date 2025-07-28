@@ -7,7 +7,7 @@ use App\Models\User;
 use App\Models\AuditLog;
 use App\Models\Lotto;
 use App\Models\Article;
-use Illuminate\Support\Facades\DB;
+use App\Services\AuditLogService;
 class AdminController extends Controller
 {
     public function index(){
