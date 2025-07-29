@@ -40,7 +40,14 @@
                 @foreach ($articles as $a)
                 <tr class="table w-full table-fixed text-white">
                     <td class="border border-gray-900 px-2 py-1">{{$a->description}}</td>
-                    <td class="border border-gray-900 px-2 py-1">{{$a->code}}</td>
+                    <td class="border border-gray-900 px-2 py-1">
+                        <div class="flex items-center justify-between">
+                            {{$a->code}}
+                            @if($a->is_moca == '1')
+                                <img src="./images/moca_article.png" class="h-9 w-9" alt="">
+                            @endif
+                        </div>
+                    </td>
                     @if($supplierCodes)
                     <td class="border border-gray-900 px-2 py-1" style="color: black !important; padding: 0px !important;">
                         <input type="hidden" wire:model.defer="components.{{ $loop->index }}.article_id" value="{{ $a->id }}">
