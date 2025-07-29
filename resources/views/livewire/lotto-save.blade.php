@@ -4,7 +4,7 @@
         <input type="hidden" wire:model.defer="code_lotto" />
         <div class="flex justify-between items-center border-b border-gray-900 pb-2 mb-4 text-white">
             <div>
-                <p class="text-sm">IO 05 – TRACCIABILITÀ LOTTI COMPONENTI (PRE-ASSEMBLATI)</p>
+                <p class="text-sm">TRACCIABILITÀ LOTTI COMPONENTI (PRE-ASSEMBLATI)</p>
             </div>
             <div class="text-right">
                 <img src="/images/logo_server_2.png" alt="Logo Onn Water" class="h-12 object-contain">

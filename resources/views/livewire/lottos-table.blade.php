@@ -31,6 +31,7 @@
                         <a href="{{route('lotto.edit', $l->id)}}" class="bg-blue-600 text-white rounded hover:text-azure-600 hover:bg-gray-400 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out p-3 w-full h-full text-center">
                             Seleziona
                         </a>
+                        <a href="{{ route('download.lotto', ['filename' => $l->code_lotto . '.pdf']) }}" class="ms-3 bg-azure-600 text-black font-bold rounded hover:bg-azure-400 transition p-3 my-2 text-center block">Scarica</a>
                     </div>
                 </td>
             </tr>
