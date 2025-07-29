@@ -76,7 +76,7 @@
                     <td>{{ $a->description }}</td>
                     <td>{{ $a->code }}</td>
                     <td style="display: flex; flex-direction:row; align-items:center;">
-                        <span>{{ $supplier_codes[$loop->index] ?? 'Nessun codice associato' }}</span>
+                        <span>{{ $supplier_codes[$loop->index] }}</span>
                         <span>
                             @if($a->is_moca)
                                 <img src="./images/moca_article.png" style="height: 30px; margin: auto;" alt="">
