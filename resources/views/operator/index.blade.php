@@ -56,10 +56,10 @@
                     @endif
                 </div>
                 <!-- Modulo 3 -->
-                <div class="bg-gray2-900 border border-gray-200 rounded-lg shadow p-4 md:col-span-2">
+                {{-- <div class="bg-gray2-900 border border-gray-200 rounded-lg shadow p-4 md:col-span-2">
                     <h2 class="text-xl font-semibold mb-2 text-gray-100">Modulo esteso</h2>
                     <p class="text-gray-100">Puoi usare questo spazio per grafici, tabelle o moduli interattivi.</p>
-                </div>
+                </div> --}}
             </div>
         </div>
     </div>
