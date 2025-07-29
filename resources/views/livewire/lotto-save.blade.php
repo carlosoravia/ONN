@@ -1,4 +1,4 @@
-<div class="max-w-6xl mx-auto border border-gray-900 p-4 rounded shadow mt-5">
+<div class="max-w-6xl mx-auto border border-gray-900 p-4 rounded shadow m-5">
     <form wire:submit.prevent="submit">
         <input type="hidden" wire:model.defer="pre_assembled_id" />
         <input type="hidden" wire:model.defer="code_lotto" />

@@ -36,4 +36,5 @@
             </x-primary-button>
         </div>
     </form>
+    <x-footer />
 </x-guest-layout>

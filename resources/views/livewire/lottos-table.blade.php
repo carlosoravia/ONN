@@ -1,4 +1,4 @@
-<div class="max-w-6xl h-fit mx-auto my-0 border border-gray-900 p-4 rounded shadow mt-5">
+<div class="max-w-6xl h-fit mx-auto my-0 border border-gray-900 p-4 rounded shadow my-5">
     <div class="flex justify-between items-center border-b border-gray-300 pb-2 mb-4">
         <div>
             <p class="text-sm text-white uppercase">LISTA LOTTI</p>
