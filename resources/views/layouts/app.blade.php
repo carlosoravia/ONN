@@ -41,6 +41,7 @@
             <main class="animate">
                 {{ $slot }}
             </main>
+            <x-footer />
         </div>
         <script src="//unpkg.com/alpinejs" defer></script>
     </body>

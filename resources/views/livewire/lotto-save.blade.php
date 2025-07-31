@@ -44,7 +44,7 @@
                         <div class="flex items-center justify-between">
                             {{$a->code}}
                             @if($a->is_moca == '1')
-                                <img src="/images/moca_article.png" class="h-9 w-9 object-cover rounded" alt="">
+                                <img src="/images/moca_article.png" class="h-9 w-9 object-cover rounded shadow-lg" alt="">
                             @endif
                         </div>
                     </td>

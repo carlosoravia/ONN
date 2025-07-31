@@ -165,6 +165,7 @@ class LottoSave extends Component
                         ->first();
 
                     array_push($oldSupplierCode, $pivot->supplier_code ?? null);
+                    array_push($newSupplierCode, $component['supplier_code'] ?? null);
                     LottoArticle::updateOrCreate(
                         [
                             'lotto_id' => $lotto->id,
@@ -177,6 +178,7 @@ class LottoSave extends Component
                     array_push($this->articles, Article::where('id', $component['article_id'])->first());
                     array_push($this->supplierCodes, $component['supplier_code']);
                 }
+                //dd([$oldSupplierCode, $newSupplierCode]);
                 AuditLog::create([
                     'user_id'     => Auth::id(),
                     'action'      => 'updated',

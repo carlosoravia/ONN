@@ -45,5 +45,6 @@
             </div>
         </div>
     </body>
+    <x-footer />
     <script src="//unpkg.com/alpinejs" defer></script>
 </html>

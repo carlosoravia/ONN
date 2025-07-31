@@ -41,5 +41,4 @@
             </table>
         </form>
     </div>
-    <x-footer />
 </x-app-layout>
