@@ -28,7 +28,10 @@
                 @endif
             </div>
         </div>
-        <table class="w-full border border-gray-900 text-sm text-white">
+        <div class="h-[32vh] w-full mt-20" wire:loading>
+            <x-loader size="12" color="azure-500" message="Salvataggio lotto..." />
+        </div>
+        <table class="w-full border border-gray-900 text-sm text-white" wire:loading.remove>
             <thead class="bg-gray-200 text-left">
                 <tr class="table w-full table-fixed text-white">
                     <th class="border border-gray-900 px-2 py-1">ARTICOLO UTILIZZATO<br><span class="text-xs font-normal">(componenti necessari per l'assemblaggio)</span></th>

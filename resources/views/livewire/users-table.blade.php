@@ -11,7 +11,10 @@
     <h2 class="text-xl font-bold text-center mb-4 border-y py-2 bg-blue-50">UTENTI</h2>
     <input wire:model.live="query" placeholder="Cerca Per Nome..." class="border border-gray-400 focus:text-dark text-dark bg-white px-3 py-1 mt-1 rounded mb-4">
     <input wire:model.live="queryNumber" placeholder="Cerca Per Codice..." class="border border-gray-400 focus:text-dark text-dark bg-white px-3 py-1 mt-1 rounded mb-4">
-    <table class="w-full h-max-content border border-gray-900 text-sm">
+    <div class="h-[32vh] w-full mt-20" wire:loading>
+        <x-loader size="12" color="azure-500" message="Caricamento utenti..." />
+    </div>
+    <table class="w-full h-max-content border border-gray-900 text-sm" wire:loading.remove>
         <thead class="bg-gray-200 text-left text-white">
             <tr class="table w-full table-fixed">
                 <th class="border border-gray-900 px-2 py-1 uppercase w-1/4">Utente<br><span class="text-xs font-normal">(descrizione del lotto)</span></th>

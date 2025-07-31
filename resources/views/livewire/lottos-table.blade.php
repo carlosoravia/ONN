@@ -20,7 +20,10 @@
                 <th class="border border-gray-900 px-2 py-1 uppercase w-1/4"></th>
             </tr>
         </thead>
-        <tbody class="block max-h-[40vh] overflow-y-auto w-full">
+        <div class="h-[32vh] w-full mt-20" wire:loading>
+            <x-loader size="12" color="azure-500" message="Caricamento lotti..." />
+        </div>
+        <tbody class="block max-h-[40vh] overflow-y-auto w-full" wire:loading.remove>
             @forelse ($lottos as $l)
             <tr class="table w-full table-fixed text-white">
                 <td class="border border-gray-300 w-2/4 p-5 ">{{$preassembleds[$loop->index][0]->description}}</td>
