@@ -28,67 +28,6 @@ class OperatorController extends Controller
         return view('operator.index', compact('lottos', 'lastLotto', 'lottosCount', 'preassembleds'));
     }
 
-    public $lottoCode;
-    public $articles = [];
-    public $supplierCodes = [];
-    public array $values = [];
-
-    public function submitLotto(Request $request)
-    {
-        $request->validate([
-            'quantity' => 'required|integer|min:1',
-            'code_lotto' => 'required|string|max:255',
-        ], [
-            'quantity.required' => 'Il numero di pezzi è obbligatorio.',
-            'quantity.min' => 'Il numero deve contenere almeno :min caratteri.',
-            'code_lotto.required' => 'Il codice lotto è obbligatorio.',
-            'code_lotto.max' => 'Il codice lotto non può superare i :max caratteri.',
-            'code_lotto.string' => 'Il codice lotto deve essere una stringa valida.',
-        ]);
-        $lotto = Lotto::create(
-            ['code_lotto' => $request->code_lotto,
-            'pre_assembled_id' => $request->pre_assembled_id,
-            'quantity' => $request->quantity]
-        );
-        AuditLogService::log('created', 'creato lotto', $lotto);
-
-        foreach ($request->components as $component) {
-            LottoArticle::create([
-                'lotto_id' => $lotto->id,
-                'article_id' => $component['article_id'],
-                'supplier_code' => $component['supplier_code'] ?? null,
-            ]);
-            array_push($this->articles, Article::where('id', $component['article_id'])->first());
-            array_push($this->supplierCodes, $component['supplier_code']);
-        }
-        $pdf = Pdf::loadView('pdf.lotto', [
-            'lotto' => $lotto,
-            'components' => $request->components,
-            'preAssembled' => Preassembled::find($request->pre_assembled_id),
-            'lottoCode' => $request->code_lotto,
-            'quantity' => $request->quantity,
-            'date' => now()->format('d/m/Y'),
-            'articles' => $this->articles,
-            'supplier_codes' =>  $this->supplierCodes,
-        ]);
-        $folderPath = storage_path('app/public/lottos');
-        if (!file_exists($folderPath)) {
-            \Log::info("Cartella non trovata, la creo: $folderPath");
-            mkdir($folderPath, 0777, true);
-        }
-        $filename = $lotto->code_lotto . '.pdf';
-        $fullPath = $folderPath . DIRECTORY_SEPARATOR . $filename;
-        $pdf->save($fullPath);
-
-        if(Auth::user()->role === "Admin"){
-            return redirect()->route('admin.index')
-            ->with('success', 'Lotto creato con successo');
-        } else if (Auth::user()->role === "Operator") {
-            return redirect()->route('operator.index')
-            ->with('success', 'Lotto creato con successo');
-        }
-    }
-
     public function selectPreAssembled(){
         return view('operator.select-pre-assembled');
     }

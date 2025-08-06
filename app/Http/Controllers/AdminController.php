@@ -143,4 +143,8 @@ class AdminController extends Controller
         ]);
         return redirect()->back()->with('success', 'Articolo creato con successo.');
     }
+
+    public function articlesToLottos(){
+        return view('admin.articles-to-lottos');
+    }
 }
