@@ -2,46 +2,72 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
-use App\Models\PreAssembled;
 use App\Models\Article;
-use Illuminate\Support\Facades\Log;
-use SimpleXMLElement;
+use App\Models\PreAssembled;
+use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
-class ImportPreassembleds extends Command
+use SimpleXMLElement;
+
+class ImportFromMago extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'app:import-preassembleds';
+    protected $signature = 'app:import-from-mago';
+
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Importa preassemblati e articoli associati da un file Excel';
+    protected $description = 'Command description';
 
     /**
      * Execute the console command.
      */
-    public function handle(): int
+    public function handle()
     {
+        //ini_set('memory_limit', '-1');
         $filePath = "/var/backups/mago/estrazione-mago.xml";
-
+        // $filePath = $this->ask('Inserisci il percorso del file XML:');
         if (!file_exists($filePath)) {
             $this->error("❌ File non trovato: $filePath");
             return 1;
         }
-
+        $mocaCodes = [];
         try {
             $xmlContent = file_get_contents($filePath);
             $xml = new SimpleXMLElement($xmlContent);
         } catch (\Throwable $e) {
-            $this->error("❌ Errore XML: " . $e->getMessage());
+            $this->error("❌ Errore nel parsing XML: " . $e->getMessage());
             return 1;
         }
+        $count = 0;
+        $mocaCount = 0;
+        foreach ($xml->record as $record) {
+            $code = trim((string) $record['CodiceComponente']);
+            $isMoca = $record['CatOmoFiglio'] == "012" ? true : false;
+            try {
+                Article::updateOrCreate(
+                    ['code' => $code],
+                    [
+                        'description' => (string) $record['DescCompo'],
+                        'is_moca' => $isMoca,
+                    ]
+                );
+                $count++;
+
+                if($isMoca){
+                    $mocaCount++;
+                }
+            } catch (\Throwable $e) {
+                $this->error("❌ Errore salvataggio: " . $e->getMessage());
+            }
+        }
+        $this->info("Totale articoli elaborati: $count");
+        $this->info("Totale articoli MOCA: $mocaCount");
 
         $struttura = [];
         $index = 0;
@@ -53,7 +79,7 @@ class ImportPreassembleds extends Command
             $componente = trim((string) $record['CodiceComponente']);
 
             if (!$padre || !$componente) {
-                $this->warn("⏭️ Riga $index saltata: Codice padre o componente mancante");
+                $this->warn("⏭ Riga $index saltata: Codice padre o componente mancante");
                 continue;
             }
 
@@ -72,7 +98,7 @@ class ImportPreassembleds extends Command
             ];
         }
 
-        $this->info("\n🔍 Trovati " . count($struttura) . " preassemblati nel file XML.");
+        $this->info("\n Trovati " . count($struttura) . " preassemblati nel file XML.");
         $associati = 0;
 
         foreach ($struttura as $codice => $info) {
@@ -85,8 +111,6 @@ class ImportPreassembleds extends Command
                         'activity' => $info['activity'],
                     ]
                 );
-
-                $this->line("\n✅ Preassemblato: {$preassembled->code}");
 
                 foreach ($info['articoli'] as $artCode => $dati) {
                     $article = Article::firstOrCreate(
@@ -105,17 +129,12 @@ class ImportPreassembleds extends Command
                             'created_at' => now(),
                         ]
                     );
-
-                    $this->line("   ↪ Articolo {$article->code} collegato (ordine: {$dati['order']})");
                     $associati++;
                 }
             } catch (\Throwable $e) {
                 $this->error("❌ Errore durante import preassemblato {$codice}: " . $e->getMessage());
-                Log::error("[ImportPreassembleds] Errore su {$codice}: " . $e->getMessage());
             }
         }
-
-        $this->info("\n🔗 Totale articoli associati: {$associati}");
         return 0;
     }
 }

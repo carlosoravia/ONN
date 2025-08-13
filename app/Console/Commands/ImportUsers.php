@@ -67,7 +67,7 @@ class ImportUsers extends Command
             }
 
             $fullName = "$nome $cognome";
-            $password = Str::random(10);
+            $password = "cambiami";
 
             $output[] = [$fullName, $matricola, $ruolo, $password];
 
