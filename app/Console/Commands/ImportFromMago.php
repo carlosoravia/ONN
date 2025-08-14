@@ -22,7 +22,7 @@ class ImportFromMago extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Importa articoli e preassemblati da Mago';
 
     /**
      * Execute the console command.
@@ -36,7 +36,6 @@ class ImportFromMago extends Command
             $this->error("❌ File non trovato: $filePath");
             return 1;
         }
-        $mocaCodes = [];
         try {
             $xmlContent = file_get_contents($filePath);
             $xml = new SimpleXMLElement($xmlContent);
