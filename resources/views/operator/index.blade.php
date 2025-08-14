@@ -5,7 +5,7 @@
             <x-dashboard-header :lottosCount="$lottosCount" :lastLotto="$lastLotto"></x-dashboard-header>
             @else
             <div class="py-9 mb-6 text-white">
-                <h1 class="text-5xl font-bold mb-2">Benvenuto <span class="text-azure-500">{{ Auth::user()->name }}</span></h1>
+                <h1 class="text-5xl font-bold mb-2">Benvenuto/a <span class="text-azure-500">{{ Auth::user()->name }}</span></h1>
                 <div class="mt-6 text-lg">
                     <p class="text-2xl">Non ci sono abbastanza dati per un resoconto</p>
                 </div>
