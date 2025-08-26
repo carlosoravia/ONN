@@ -1,5 +1,5 @@
 <x-app-layout>
-    <div class="">
+    <div class="flex flex-row justify-center">
         <livewire:article-to-lottos-table />
         <livewire:supplier-code-to-lottos-table />
     </div>

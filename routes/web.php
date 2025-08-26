@@ -42,6 +42,8 @@ Route::middleware(['auth', AdminAccess::class])->group(function () {
     Route::get('/edit-articles', [AdminController::class, 'showArticles'])->name('admin.editArticles');
     Route::get('/audit-logs/{id}', [AdminController::class, 'showAuditLogs'])->name('admin.auditLog');
     Route::get('/articles-to-lottos', [AdminController::class, 'articlesToLottos'])->name('admin.articlesToLottos');
+    Route::get('/create-preassembled', [AdminController::class, 'createPreassembled'])->name('admin.createPreassembled');
+    Route::get('/edit-preassembled/{id}', [AdminController::class, 'editPreassembled'])->name('admin.editPreassembled');
 
     // post routes
     Route::post('/create-user', [AdminController::class, 'createUser'])->name('admin.createUser');

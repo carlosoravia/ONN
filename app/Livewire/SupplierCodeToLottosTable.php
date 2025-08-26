@@ -4,13 +4,16 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use App\Models\Lotto;
-use App\Models\LottoArticle;
 class SupplierCodeToLottosTable extends Component
 {
     public string $supplier_code = '';
     public $lottos = [];
 
-    public function search()
+    public function mount(){
+        $this->lottos = collect();
+    }
+
+    public function search2()
     {
          $this->lottos = Lotto::whereHas('lottoArticles', function ($query) {
             $query->where('supplier_code', $this->supplier_code);

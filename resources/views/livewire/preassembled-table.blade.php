@@ -28,7 +28,9 @@
                 <td class="border border-gray-300 w-1/4 px-2 py-1">{{$p->code}}</td>
                 <td class="border border-gray-300 w-1/4 p-0">
                     <div class="flex justify-center items-center h-full px-3">
-                        <a href="{{route('lotto.create', $p->id)}}" class="bg-blue-600 text-white rounded hover:text-azure-600 hover:bg-gray-400 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out p-3 w-full h-full text-center">
+                        <a href="{{ $context === 'operator'
+                            ? route('lotto.create', ['lottoId' => $p->id])
+                            : route('admin.editPreassembled', ['id' => $p->id]) }}" class="bg-blue-600 text-white rounded hover:text-azure-600 hover:bg-gray-400 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out p-3 w-full h-full text-center">
                             Seleziona
                         </a>
                     </div>

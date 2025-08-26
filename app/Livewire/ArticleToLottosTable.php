@@ -10,6 +10,9 @@ class ArticleToLottosTable extends Component
     public $lottos = [];
     public ?string $code = null;
 
+    public function mount(){
+        $this->lottos = collect();
+    }
 
     public function search()
     {

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\PreAssembled;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\AuditLog;
@@ -10,6 +11,11 @@ use App\Models\Article;
 use App\Services\AuditLogService;
 class AdminController extends Controller
 {
+    /**
+     * Mostra la dashboard admin con ultimi audit, lotto e conteggio lotti di oggi.
+     *
+     * @return \Illuminate\View\View
+     */
     public function index(){
         $audits = AuditLog::orderBy('created_at', 'desc')->take(20)->get();
         $lottos = Lotto::where('created_at', '>=', date_format(now(), 'Y-m-d'))->get();
@@ -17,15 +23,28 @@ class AdminController extends Controller
         $lottosCount = $lottos->count();
         return view('admin.index', compact('audits', 'lastLotto', 'lottosCount'));
     }
-
+    /**
+     * Mostra la vista per modificare gli utenti.
+     *
+     * @return \Illuminate\View\View
+     */
     public function editUsers(){
         return view('admin.edit-users');
     }
-
+    /**
+     * Mostra la vista per modificare gli articoli.
+     *
+     * @return \Illuminate\View\View
+     */
     public function showArticles(){
         return view('admin.edit-articles');
     }
-
+    /**
+     * Mostra i dettagli di un audit log specifico.
+     *
+     * @param int $id
+     * @return \Illuminate\View\View
+     */
     public function showAuditLogs($id)
     {
         $lotto = '';
@@ -47,15 +66,23 @@ class AdminController extends Controller
             : $audit->changed_data;
         return view('admin.show-audit-logs', compact('audit','record', 'user', 'updatedData', 'lottoCode', 'linkToRecord'));
     }
-
-
-
+    /**
+     * Elimina un utente e registra l'azione in AuditLog.
+     *
+     * @param int $id
+     * @return void
+     */
     public function deleteUser($id)
     {
         $user = User::findOrFail($id)->delete();
         AuditLogService::log('deleted', 'elimato utente', $user);
     }
-
+    /**
+     * Imposta il ruolo di un utente su Admin.
+     *
+     * @param int $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function makeAdmin($id)
     {
         $user = User::findOrFail($id);
@@ -64,7 +91,12 @@ class AdminController extends Controller
 
         return redirect()->back()->with('success', 'Ruolo impostato su Admin.');
     }
-
+    /**
+     * Imposta il ruolo di un utente su Operatore.
+     *
+     * @param int $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function makeOperator($id)
     {
         $user = User::findOrFail($id);
@@ -72,7 +104,12 @@ class AdminController extends Controller
         $user->save();
         return redirect()->back()->with('success', 'Ruolo impostato su Operatore.');
     }
-
+    /**
+     * Crea un nuovo utente con validazione.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function createUser(Request $request)
     {
         $request->validate([
@@ -91,7 +128,13 @@ class AdminController extends Controller
         ]);
         return redirect()->back()->with('success', 'Utente creato con successo.');
     }
-
+    /**
+     * Modifica un articolo esistente con validazione.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function editArticles(Request $request, $id){
         $request->validate([
             'code' => 'required|string|max:255',
@@ -110,18 +153,35 @@ class AdminController extends Controller
         $article->save();
         return redirect()->back()->with('success', 'Articolo aggiornato con successo.');
     }
-
+    /**
+     * Elimina un articolo.
+     *
+     * @param int $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function deleteArticle($id){
         $article = Article::findOrFail($id);
         $article->delete();
         return redirect()->back()->with('success', 'Articolo eliminato con successo.');
     }
+    /**
+     * Aggiorna lo stato MOCA di un articolo.
+     *
+     * @param int $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function updateArticle($id){
         $article = Article::findOrFail($id);
         $article->is_moca = !$article->is_moca;
         $article->save();
         return redirect()->back()->with('success', 'Articolo aggiornato con successo.');
     }
+    /**
+     * Crea un nuovo articolo con validazione.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function createArticle(Request $request){
 
         if(!$request->has('is_moca')){
@@ -143,8 +203,31 @@ class AdminController extends Controller
         ]);
         return redirect()->back()->with('success', 'Articolo creato con successo.');
     }
-
+    /**
+     * Mostra la vista di associazione articoli-lotti.
+     *
+     * @return \Illuminate\View\View
+     */
     public function articlesToLottos(){
         return view('admin.articles-to-lottos');
+    }
+    /**
+     * Mostra la vista per creare un preassemblato.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function createPreassembled(){
+        return view('admin.create-preassembled');
+    }
+    /**
+     * Mostra la vista per modificare un preassemblato.
+     *
+     * @param int $id
+     * @return \Illuminate\View\View
+     */
+    public function editPreassembled($id){
+        $preassembled = PreAssembled::findOrFail($id);
+        $articles = $preassembled->articles;
+        return view('admin.edit-preassembled', compact('preassembled', 'articles'));
     }
 }

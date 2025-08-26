@@ -38,7 +38,7 @@
                 </div>
             @endif
 
-            <main class="animate min-h-[81vh]">
+            <main class="animate min-h-screen">
                 {{ $slot }}
             </main>
             <x-footer />

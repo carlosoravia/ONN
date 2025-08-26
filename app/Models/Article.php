@@ -15,7 +15,7 @@ class Article extends Model
         'is_moca',
     ];
 
-    public function preassemblies()
+    public function preassembleds()
     {
         return $this->belongsToMany(PreAssembled::class, 'preassembled_articles')
             ->withPivot('order')->withTimestamps();

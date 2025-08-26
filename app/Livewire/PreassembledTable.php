@@ -9,7 +9,12 @@ class PreassembledTable extends Component
 {
     public $query = '';
     public $queryCode = '';
+    public string $context = 'default';
 
+    public function mount($context = 'default')
+    {
+        $this->context = $context;
+    }
     public function render()
     {
         if ($this->queryCode) {
