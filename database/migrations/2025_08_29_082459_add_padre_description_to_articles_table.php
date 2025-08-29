@@ -11,13 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('pre_assembleds', function (Blueprint $table) {
-            $table->id();
-            $table->string('code')->unique();
-            $table->text('description');
-            $table->text('padre_description');
-            $table->text('activity');
-            $table->timestamps();
+        Schema::table('articles', function (Blueprint $table) {
+            $table->string('padre_description')->nullable()->after('description');
         });
     }
 
@@ -26,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('pre_assembleds');
+        Schema::table('articles', function (Blueprint $table) {
+            $table->dropColumn('padre_description');
+        });
     }
 };

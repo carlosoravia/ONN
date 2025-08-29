@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\Auditable;
-use App\Models\Preassembled;
+use App\Models\PreAssembled;
 class Article extends Model
 {
     use Auditable;
@@ -12,6 +12,7 @@ class Article extends Model
     protected $fillable = [
         'code',
         'description',
+        'padre_description',
         'is_moca',
     ];
 

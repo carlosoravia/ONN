@@ -1,3 +1,3 @@
 <x-app-layout>
-    <livewire:preassembled-table :context="'operator'"/>
+    <livewire:preAssembled-table :context="'operator'"/>
 </x-app-layout>

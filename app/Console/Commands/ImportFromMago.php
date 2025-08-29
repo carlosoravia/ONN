@@ -102,7 +102,7 @@ class ImportFromMago extends Command
 
         foreach ($struttura as $codice => $info) {
             try {
-                $preassembled = PreAssembled::updateOrCreate(
+                $preAssembled = PreAssembled::updateOrCreate(
                     ['code' => $codice],
                     [
                         'description' => $info['description'],
@@ -119,7 +119,7 @@ class ImportFromMago extends Command
 
                     DB::table('preassembled_articles')->updateOrInsert(
                         [
-                            'pre_assembled_id' => $preassembled->id,
+                            'pre_assembled_id' => $preAssembled->id,
                             'article_id' => $article->id
                         ],
                         [

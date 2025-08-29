@@ -136,7 +136,7 @@ class LottoSave extends Component
                 $pdf = Pdf::loadView('pdf.lotto', [
                     'lotto' => $lotto,
                     'components' => $this->components,
-                    'preAssembled' => Preassembled::find($this->pre_assembled_id),
+                    'preAssembled' => PreAssembled::find($this->pre_assembled_id),
                     'lottoCode' => $this->code_lotto,
                     'quantity' => $this->quantity,
                     'date' => now()->format('d/m/Y'),
@@ -196,7 +196,7 @@ class LottoSave extends Component
                 $pdf = Pdf::loadView('pdf.lotto', [
                     'lotto' => $lotto,
                     'components' => $this->components,
-                    'preAssembled' => Preassembled::find($this->pre_assembled_id),
+                    'preAssembled' => PreAssembled::find($this->pre_assembled_id),
                     'lottoCode' => $this->code_lotto,
                     'quantity' => $this->quantity,
                     'date' => now()->format('d/m/Y'),

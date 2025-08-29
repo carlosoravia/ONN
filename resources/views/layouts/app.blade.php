@@ -13,6 +13,7 @@
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+        @livewireStyles
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-500">
@@ -43,6 +44,15 @@
             </main>
             <x-footer />
         </div>
-        <script src="//unpkg.com/alpinejs" defer></script>
+        {{-- Alpine è già gestito da Livewire v3 (inject_assets=true). Rimuoviamo il CDN per evitare istanze duplicate. --}}
+        <script>
+            // Navigazione lato client dopo azioni Livewire (evita race su /livewire/update)
+            document.addEventListener('navigate-to', (e) => {
+                if (e?.detail?.url) {
+                    window.location.href = e.detail.url;
+                }
+            });
+        </script>
+        @livewireScripts
     </body>
 </html>

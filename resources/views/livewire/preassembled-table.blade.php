@@ -1,4 +1,5 @@
-<div class="max-w-6xl h-fit mx-auto my-0 border border-gray-900 p-4 rounded shadow my-5">
+<div class="max-w-6xl h-fit mx-auto my-0 p-4 rounded shadow-md my-5 {{ $context === 'operator' ? 'border border-gray-900' : 'border-2 border-gray-700'}}">
+    @if($context === 'operator')
     <div class="flex justify-between items-center pb-2 mb-4">
         <div>
             <p class="text-sm text-white">LISTA PRE-ASSEMBLATI</p>
@@ -8,6 +9,8 @@
         </div>
     </div>
     <h2 class="text-xl font-bold text-center mb-4 border-y py-2 bg-blue-50">PRE-ASSEMBLATI</h2>
+    @else
+    @endif
     <input wire:model.live="query" placeholder="Cerca Per Nome..." class="border border-gray-400 focus:text-dark text-dark bg-white px-3 py-1 mt-1 rounded mb-4">
     <input wire:model.live="queryCode" placeholder="Cerca Per Codice..." class="border border-gray-400 focus:text-dark text-dark bg-white px-3 py-1 mt-1 rounded mb-4">
     <div class="h-[32vh] w-full mt-20" wire:loading>
@@ -23,7 +26,7 @@
         </thead>
         <tbody class="block max-h-[40vh] overflow-y-auto w-full">
             @foreach ($preassembleds as $p)
-            <tr class="table w-full table-fixed text-white">
+            <tr class="table w-full table-fixed {{ $loop->index % 2 == 0 ? ($context === 'operator' ? 'bg-gray-500 text-white' : 'bg-gray-800') : ($context === 'operator' ? 'bg-gray-600 text-white' : 'bg-gray-900') }}">
                 <td class="border border-gray-300 w-2/4 p-5 ">{{$p->padre_description}}</td>
                 <td class="border border-gray-300 w-1/4 px-2 py-1">{{$p->code}}</td>
                 <td class="border border-gray-300 w-1/4 p-0">
@@ -33,6 +36,14 @@
                             : route('admin.editPreassembled', ['id' => $p->id]) }}" class="bg-blue-600 text-white rounded hover:text-azure-600 hover:bg-gray-400 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out p-3 w-full h-full text-center">
                             Seleziona
                         </a>
+                        @if($context === 'admin')
+                        <form action="{{ route('preassembled.delete', ['id' => $p->id]) }}" method="POST">
+                            @csrf
+                            <button type="submit" class="ms-3 bg-red-600 text-white rounded hover:text-azure-600 hover:bg-gray-400 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out p-3 w-full h-full text-center">
+                                Elimina
+                            </button>
+                        </form>
+                        @endif
                     </div>
                 </td>
             </tr>

@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\AuditLog;
 use App\Models\Lotto;
 use App\Models\Article;
+use App\Models\PreassembledArticle;
 use App\Services\AuditLogService;
 class AdminController extends Controller
 {
@@ -226,8 +227,47 @@ class AdminController extends Controller
      * @return \Illuminate\View\View
      */
     public function editPreassembled($id){
-        $preassembled = PreAssembled::findOrFail($id);
-        $articles = $preassembled->articles;
-        return view('admin.edit-preassembled', compact('preassembled', 'articles'));
+        $preAssembled = PreAssembled::findOrFail($id);
+        $articles = $preAssembled->articles;
+        return view('admin.edit-preassembled', compact('preAssembled', 'articles'));
+    }
+    /**
+     * Elimina preassemblato.
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function deletePreassembled($id){
+        PreAssembled::findOrFail($id)->delete();
+        return redirect()->back()->with('success', 'Preassemblato eliminato con successo.');
+    }
+
+    /**
+     * Fallback non-Livewire per creare/aggiornare un preassemblato da form POST.
+     */
+    public function storePreassembled(Request $request)
+    {
+        $validated = $request->validate([
+            'preassembled_code' => 'required|string|max:255',
+            'preassembled_description' => 'required|string|max:2000',
+            'selected_articles' => 'required|array|min:1',
+            'selected_articles.*' => 'integer|exists:articles,id',
+        ]);
+
+        $preAssembled = PreAssembled::updateOrCreate([
+            'code' => $validated['preassembled_code'],
+        ], [
+            'description' => $validated['preassembled_description'],
+            'padre_description' => ' ',
+            'activity' => ' ',
+        ]);
+
+        foreach ($validated['selected_articles'] as $articleId) {
+            PreassembledArticle::firstOrCreate([
+                'pre_assembled_id' => $preAssembled->id,
+                'article_id' => $articleId,
+            ]);
+        }
+
+        return redirect()->route('admin.index')->with('success', 'Preassemblato creato con successo.');
     }
 }

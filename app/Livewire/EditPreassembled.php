@@ -10,17 +10,21 @@ class EditPreassembled extends Component
 {
     public $preassembled_id;
     public $articles;
+    public $preAssembled;
     public function removeArticle($id){
         PreassembledArticle::where('article_id', $id)->delete();
 
-        $this->articles = Article::whereHas('preassembleds', function ($query) {
+        Article::whereHas('preassembleds', function ($query) {
             $query->where('pre_assembled_id', $this->preassembled_id);
         })->get();
     }
 
-    public
     public function render()
     {
-        return view('livewire.edit-preassembled');
+        $this->articles = Article::whereHas('preassembleds', function ($query) {
+            $query->where('pre_assembled_id', $this->preAssembled->id);
+        })->get();
+
+        return view('livewire.edit-preAssembled');
     }
 }

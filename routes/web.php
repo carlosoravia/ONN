@@ -55,6 +55,12 @@ Route::middleware(['auth', AdminAccess::class])->group(function () {
     Route::post('/article/{id}/delete', [AdminController::class, 'deleteArticle'])->name('article.delete');
     Route::post('/article/{id}/make-moca', [AdminController::class, 'updateArticle'])->name('article.update');
 
+    // conferma creazione preassemblato (fallback non-Livewire)
+    Route::post('/preassembled/store', [AdminController::class, 'storePreassembled'])
+        ->name('admin.preassembled.store');
+
+    Route::post('/preassembled/{id}/delete', [AdminController::class, 'deletePreassembled'])->name('preassembled.delete');
+
 });
 
 Route::middleware(['auth', CheckOperatorCode::class])->group(function () {
