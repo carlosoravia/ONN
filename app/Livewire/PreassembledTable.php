@@ -32,6 +32,6 @@ class PreassembledTable extends Component
         } else {
             $preassembleds = PreAssembled::all();
         }
-        return view('livewire.preAssembled-table', compact('preassembleds'));
+        return view('livewire.preassembled-table', compact('preassembleds'));
     }
 }
