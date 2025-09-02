@@ -12,4 +12,9 @@ class LottoArticle extends Model
         'article_id',
         'supplier_code',
     ];
+
+    public function article()
+    {
+        return $this->belongsTo(Article::class, 'article_id');
+    }
 }

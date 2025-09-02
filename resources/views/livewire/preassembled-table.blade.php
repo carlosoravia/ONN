@@ -36,8 +36,8 @@
                             : route('admin.editPreassembled', ['id' => $p->id]) }}" class="bg-blue-600 text-white rounded hover:text-azure-600 hover:bg-gray-400 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out p-3 w-full h-full text-center">
                             Crea nuovo lotto
                         </a>
-                        @if($p->latestLotto != null)
-                        <a href="{{ route('lotto.createFromExisting', ['lottoId' => $p->latestLotto->id]) }}" class="ms-3 bg-green-700 text-white rounded hover:text-azure-600 hover:bg-gray-400 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out p-3 w-full h-full text-center">Crea da lotto esistente</a>
+                        @if($p->latestLotto != null && $context === 'operator')
+                        <a href="{{ route('lotto.createFromExisting', ['lottoId' => $p->latestLotto->id]) }}" class="ms-3 bg-green-700 text-white rounded hover:text-azure-600 hover:bg-gray-400 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out p-3 w-full h-full text-center">Copia da lotto esistente</a>
                         @endif
                         @if($context === 'admin')
                         <form action="{{ route('preassembled.delete', ['id' => $p->id]) }}" method="POST">
