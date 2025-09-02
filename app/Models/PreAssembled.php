@@ -25,4 +25,9 @@ class PreAssembled extends Model
     {
         return $this->hasMany(Lotto::class);
     }
+
+    public function latestLotto()
+    {
+        return $this->hasOne(Lotto::class)->latestOfMany();
+    }
 }

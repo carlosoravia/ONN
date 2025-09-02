@@ -13,7 +13,7 @@
         <h2 class="text-xl font-bold text-center mb-4 border-y py-2 bg-blue-50">PRE-ASSEMBLATI</h2>
         <div class="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-                <p class="text-azure-500 font-semibold">CODICE PRE-ASSEMBLATO: <span class="text-white">{{$preAssembled->code}}</span></p>
+                <p class="text-azure-500 font-semibold">CODICE PRE-ASSEMBLATO: <span class="text-white">{{$preassembleds->code}}</span></p>
                 <p class="text-azure-500">
                     LOTTO N°:
                     <span class="text-white">{{$lottoCode}}</span>

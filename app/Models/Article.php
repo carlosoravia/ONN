@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\Auditable;
-use App\Models\PreAssembled;
+use App\Models\Preassembled;
 class Article extends Model
 {
     use Auditable;
@@ -18,7 +18,7 @@ class Article extends Model
 
     public function preassembleds()
     {
-        return $this->belongsToMany(PreAssembled::class, 'preassembled_articles')
+        return $this->belongsToMany(Preassembled::class, 'preassembled_articles')
             ->withPivot('order')->withTimestamps();
     }
 

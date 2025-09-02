@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\PreAssembled;
+use App\Models\Preassembled;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\AuditLog;
@@ -227,9 +227,9 @@ class AdminController extends Controller
      * @return \Illuminate\View\View
      */
     public function editPreassembled($id){
-        $preAssembled = PreAssembled::findOrFail($id);
-        $articles = $preAssembled->articles;
-        return view('admin.edit-preassembled', compact('preAssembled', 'articles'));
+        $preassembleds = Preassembled::findOrFail($id);
+        $articles = $preassembleds->articles;
+        return view('admin.edit-preassembled', compact('preassembleds', 'articles'));
     }
     /**
      * Elimina preassemblato.
@@ -237,7 +237,7 @@ class AdminController extends Controller
      * @return \Illuminate\Http\RedirectResponse
      */
     public function deletePreassembled($id){
-        PreAssembled::findOrFail($id)->delete();
+        Preassembled::findOrFail($id)->delete();
         return redirect()->back()->with('success', 'Preassemblato eliminato con successo.');
     }
 
@@ -253,7 +253,7 @@ class AdminController extends Controller
             'selected_articles.*' => 'integer|exists:articles,id',
         ]);
 
-        $preAssembled = PreAssembled::updateOrCreate([
+        $preassembleds = Preassembled::updateOrCreate([
             'code' => $validated['preassembled_code'],
         ], [
             'description' => $validated['preassembled_description'],
@@ -263,7 +263,7 @@ class AdminController extends Controller
 
         foreach ($validated['selected_articles'] as $articleId) {
             PreassembledArticle::firstOrCreate([
-                'pre_assembled_id' => $preAssembled->id,
+                'pre_assembled_id' => $preassembleds->id,
                 'article_id' => $articleId,
             ]);
         }

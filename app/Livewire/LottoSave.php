@@ -2,25 +2,27 @@
 
 namespace App\Livewire;
 
-use Livewire\Component;
-use App\Models\Lotto;
 use App\Models\Article;
-use App\Models\LottoArticle;
-use App\Models\PreAssembled;
-use App\Services\LottoService;
-use Illuminate\Support\Facades\Log;
 use App\Models\AuditLog;
-use Illuminate\Support\Facades\Auth;
-use Barryvdh\DomPDF\Facade\Pdf;
+use App\Models\Lotto;
+use App\Models\LottoArticle;
+use App\Models\Preassembled;
 use App\Models\PreassembledArticle;
 use App\Services\AuditLogService;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Servixes\LottoService;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\ValidationException;
+use App\Services\GenerateLottoNumberService as LottoCodeGenerator;
+use Livewire\Component;
 
 class LottoSave extends Component
 {
     public $lottoId;
     public $lottoCode;
     public $code_lotto;
-    public $preAssembled;
+    public $preassembleds;
     public $pre_assembled_id;
     public $quantity;
     public $supplierCodes = [];
@@ -28,16 +30,17 @@ class LottoSave extends Component
     public $articles = [];
     public $lotto;
     public bool $showValidationModal = false;
+    public string $context;
 
-
-   public function mount($preAssembled, $lottoCode, $articles, $components, ?Lotto $lotto = null, $supplierCodes)
+   public function mount($preassembleds, $lottoCode, $articles, $components, ?Lotto $lotto = null, $supplierCodes, $context = 'default')
     {
-        $this->preAssembled = $preAssembled;
-        $this->pre_assembled_id = $preAssembled->id;
+        $this->preassembleds = $preassembleds;
+        $this->pre_assembled_id = $preassembleds->id;
         $this->code_lotto = $lottoCode;
         $this->articles = $articles;
         $this->lotto = $lotto;
         $this->quantity = $lotto->quantity ?? null;
+        $this->context = $context;
 
         if ($lotto && isset($lotto->id)) {
             $this->lottoId = $lotto->id;
@@ -91,7 +94,7 @@ class LottoSave extends Component
         $rules = [
             'code_lotto' => 'required|string',
             'quantity' => 'required|numeric|min:1',
-            'pre_assembled_id' => 'required|exists:preassembled_articles,id',
+            'pre_assembled_id' => 'required',
         ];
 
         foreach ($this->components as $index => $component) {
@@ -118,7 +121,7 @@ class LottoSave extends Component
             $this->articles = [];
             $this->supplierCodes = [];
             $lotto = Lotto::where('code_lotto', $this->code_lotto)->first();
-            if (!$this->lottoId) {
+            if ($this->context === 'create') {
                 $lotto = Lotto::create([
                     'code_lotto' => $this->code_lotto,
                     'pre_assembled_id' => $this->pre_assembled_id,
@@ -136,7 +139,7 @@ class LottoSave extends Component
                 $pdf = Pdf::loadView('pdf.lotto', [
                     'lotto' => $lotto,
                     'components' => $this->components,
-                    'preAssembled' => PreAssembled::find($this->pre_assembled_id),
+                    'preassembleds' => Preassembled::find($this->pre_assembled_id),
                     'lottoCode' => $this->code_lotto,
                     'quantity' => $this->quantity,
                     'date' => now()->format('d/m/Y'),
@@ -152,7 +155,7 @@ class LottoSave extends Component
                 $fullPath = $folderPath . DIRECTORY_SEPARATOR . $filename;
                 $pdf->save($fullPath);
                 AuditLogService::log('created', 'creato lotto', $lotto);
-            }else{
+            }else if($this->context === 'edit'){
                 $lotto = Lotto::findOrFail($this->lottoId);
                 $oldSupplierCode = [];
                 $newSupplierCode = [];
@@ -196,25 +199,72 @@ class LottoSave extends Component
                 $pdf = Pdf::loadView('pdf.lotto', [
                     'lotto' => $lotto,
                     'components' => $this->components,
-                    'preAssembled' => PreAssembled::find($this->pre_assembled_id),
+                    'preassembleds' => Preassembled::find($this->pre_assembled_id),
                     'lottoCode' => $this->code_lotto,
                     'quantity' => $this->quantity,
                     'date' => now()->format('d/m/Y'),
                     'articles' => $this->articles,
                     'supplier_codes' =>  $this->supplierCodes,
                 ]);
-                if (!file_exists($folderPath)) {
-                    \Log::info("Cartella non trovata, la creo: $folderPath");
-                    mkdir($folderPath, 0777, true);
+                $pdf->save($fullPath);
+            }else if($this->context === 'create-from-existing'){
+                $newLotto = Lotto::create([
+                    'code_lotto' => $this->code_lotto,
+                    'pre_assembled_id' => $this->pre_assembled_id,
+                    'quantity' => $this->quantity
+                ]);
+                $lotto = Lotto::findOrFail($this->lottoId);
+                $oldSupplierCode = [];
+                $newSupplierCode = [];
+                foreach ($this->components as $component) {
+                    $pivot = LottoArticle::where('lotto_id', $lotto->id)
+                        ->where('article_id', $component['article_id'])
+                        ->first();
+
+                    array_push($oldSupplierCode, $pivot->supplier_code ?? null);
+                    array_push($newSupplierCode, $component['supplier_code'] ?? null);
+                    LottoArticle::Create(
+                        [
+                            'lotto_id' => $newLotto->id,
+                            'article_id' => $component['article_id'],
+                            'supplier_code' => $component['supplier_code'] ?? null,
+                        ]
+                    );
+                    array_push($this->articles, Article::where('id', $component['article_id'])->first());
+                    array_push($this->supplierCodes, $component['supplier_code']);
                 }
+                AuditLog::create([
+                    'user_id'     => Auth::id(),
+                    'action'      => 'created',
+                    'table_name'  => 'lotto_articles',
+                    'record_id'   => $lotto->id,
+                    'changed_data'=> [$oldSupplierCode, $newSupplierCode],
+                ]);
+                $folderPath = storage_path('app/public/lottos');
+                $filename = $lotto->code_lotto . '.pdf';
+                $fullPath = $folderPath . DIRECTORY_SEPARATOR . $filename;
+                if (file_exists($fullPath)) {
+                    unlink($fullPath);
+                }
+                // --- RIGENERA IL PDF ---
+                $pdf = Pdf::loadView('pdf.lotto', [
+                    'lotto' => $lotto,
+                    'components' => $this->components,
+                    'preassembleds' => Preassembled::find($this->pre_assembled_id),
+                    'lottoCode' => $this->code_lotto,
+                    'quantity' => $this->quantity,
+                    'date' => now()->format('d/m/Y'),
+                    'articles' => $this->articles,
+                    'supplier_codes' =>  $this->supplierCodes,
+                ]);
                 $pdf->save($fullPath);
             }
             return redirect()->route(
                 Auth::user()->role === 'Admin' ? 'admin.index' : 'operator.index'
             )->with('success', 'Lotto salvato con successo');
         } catch (ValidationException $e) {
-            $this->dispatchBrowserEvent('showModal'); // <- Mostra il modal
-            throw $e; // Fa sì che Livewire gestisca normalmente gli errori
+            $this->dispatchBrowserEvent('showModal');
+            throw $e;
         }
     }
     public function render()

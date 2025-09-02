@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\Article;
-use App\Models\PreAssembled;
+use App\Models\Preassembled;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use SimpleXMLElement;
@@ -102,7 +102,7 @@ class ImportFromMago extends Command
 
         foreach ($struttura as $codice => $info) {
             try {
-                $preAssembled = PreAssembled::updateOrCreate(
+                $preassembleds = Preassembled::updateOrCreate(
                     ['code' => $codice],
                     [
                         'description' => $info['description'],
@@ -119,7 +119,7 @@ class ImportFromMago extends Command
 
                     DB::table('preassembled_articles')->updateOrInsert(
                         [
-                            'pre_assembled_id' => $preAssembled->id,
+                            'pre_assembled_id' => $preassembleds->id,
                             'article_id' => $article->id
                         ],
                         [

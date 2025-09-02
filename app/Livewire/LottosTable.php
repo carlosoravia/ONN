@@ -4,7 +4,7 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use App\Models\Lotto;
-use App\Models\PreAssembled;
+use App\Models\Preassembled;
 
 class LottosTable extends Component
 {
@@ -16,7 +16,7 @@ class LottosTable extends Component
     public function processData($lottos) : array {
         if ($lottos) {
             foreach($lottos as $l){
-                array_push($this->preassembleds, PreAssembled::where('id', $l->pre_assembled_id)->get());
+                array_push($this->preassembleds, Preassembled::where('id', $l->pre_assembled_id)->get());
             }
             return $this->preassembleds;
         }else{
@@ -36,7 +36,7 @@ class LottosTable extends Component
         }else if ($this->query) {
             $lottos = Lotto::query()
             ->when($this->query, function ($query) {
-                $query->whereHas('preAssembled', function ($subQuery) {
+                $query->whereHas('preassembleds', function ($subQuery) {
                     $subQuery->where('description', 'like', '%' . $this->query . '%');
                 });
             })->orderBy('id', 'desc')

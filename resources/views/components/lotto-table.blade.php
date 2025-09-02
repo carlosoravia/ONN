@@ -1,7 +1,7 @@
 <div class="max-w-6xl mx-auto border border-gray-900 p-4 rounded shadow mt-12">
     <form action="{{ Route::current()->getName() == 'lotto.create' ? route('lotto.submit') : route('lotto.update') }}" method="POST">
         @csrf
-        <input type="hidden" name="pre_assembled_id" value="{{ $preAssembled->id }}">
+        <input type="hidden" name="pre_assembled_id" value="{{ $preassembleds->id }}">
         <input type="hidden" name="code_lotto" value="{{ $lottoCode }}">
         <div class="flex justify-between items-center border-b border-gray-900 pb-2 mb-4 text-white">
             <div>
@@ -14,7 +14,7 @@
         <h2 class="text-xl font-bold text-center mb-4 border-y py-2 bg-blue-50">PRE-ASSEMBLATI</h2>
         <div class="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-                <p class="text-azure-500 font-semibold">CODICE PRE-ASSEMBLATO: <span class="text-white">{{$preAssembled->code}}</span></p>
+                <p class="text-azure-500 font-semibold">CODICE PRE-ASSEMBLATO: <span class="text-white">{{$preassembleds->code}}</span></p>
                 <p class="text-azure-500">
                     LOTTO N°:
                     <span class="text-white">{{$lottoCode}}</span>

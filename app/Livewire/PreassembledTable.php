@@ -3,7 +3,7 @@
 namespace App\Livewire;
 
 use Livewire\Component;
-use App\Models\PreAssembled;
+use App\Models\Preassembled;
 
 class PreassembledTable extends Component
 {
@@ -18,19 +18,19 @@ class PreassembledTable extends Component
     public function render()
     {
         if ($this->queryCode) {
-            $preassembleds = PreAssembled::query()
+            $preassembleds = Preassembled::query()
             ->when($this->queryCode, function ($queryCode) {
                 $queryCode->where('code', 'like', '%' . $this->queryCode . '%');
             })
             ->get();
         }else if ($this->query) {
-            $preassembleds = PreAssembled::query()
+            $preassembleds = Preassembled::query()
             ->when($this->query, function ($query) {
                 $query->where('description', 'like', '%' . $this->query . '%');
             })
             ->get();
         } else {
-            $preassembleds = PreAssembled::all();
+            $preassembleds = Preassembled::with('latestLotto')->get();
         }
         return view('livewire.preassembled-table', compact('preassembleds'));
     }

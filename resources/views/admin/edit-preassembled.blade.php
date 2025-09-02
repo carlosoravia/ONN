@@ -1,3 +1,3 @@
 <x-app-layout>
-    <livewire:edit-preAssembled :preAssembled="$preAssembled" :articles="$articles"/>
+    <livewire:edit-preassembleds :preassembleds="$preassembleds" :articles="$articles"/>
 </x-app-layout>

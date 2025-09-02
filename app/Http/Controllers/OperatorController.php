@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Lotto;
-use App\Models\PreAssembled;
+use App\Models\Preassembled;
 use App\Models\LottoArticle;
 use App\Models\PreassembledArticle;
 use App\Models\Article;
@@ -22,7 +22,7 @@ class OperatorController extends Controller
         $lastLotto = Lotto::orderBy('created_at', 'desc')->first();
         $preassembleds = [];
         foreach ($lottos as $lotto) {
-            array_push($preassembleds, PreAssembled::where('id', $lotto->pre_assembled_id)->first());
+            array_push($preassembleds, Preassembled::where('id', $lotto->pre_assembled_id)->first());
         }
         $lottosCount = $lottos->count();
         return view('operator.index', compact('lottos', 'lastLotto', 'lottosCount', 'preassembleds'));
@@ -38,13 +38,13 @@ class OperatorController extends Controller
         $supplierCodes = [];
         $lottoCode = $lottoService->generaCodiceLotto();
         $components = PreassembledArticle::where('pre_assembled_id', $lottoId)->get();
-        $preAssembled = PreAssembled::where('id', $lottoId)->first();
+        $preassembleds = Preassembled::where('id', $lottoId)->first();
         foreach ($components as $component) {
             array_push($articles, Article::where('id', $component->article_id)->first());
             $supplierCodes = LottoArticle::where('article_id', $component->article_id)
                                  ->pluck('supplier_code')->toArray();
         }
-        return view('operator.create-lotto', compact('articles', 'preAssembled', 'lottoCode', 'supplierCodes', 'components'))
+        return view('operator.create-lotto', compact('articles', 'preassembleds', 'lottoCode', 'supplierCodes', 'components'))
             ->with('lottoCode', $lottoCode);
     }
 
@@ -62,7 +62,7 @@ class OperatorController extends Controller
             }
         }
         foreach ($lottos as $lotto) {
-            array_push($preassembleds, PreAssembled::where('id', $lotto->pre_assembled_id)->first());
+            array_push($preassembleds, Preassembled::where('id', $lotto->pre_assembled_id)->first());
         }
         return view('operator.lottos-show', compact('lottos', 'preassembleds'));
     }
@@ -73,13 +73,13 @@ class OperatorController extends Controller
         $supplierCodes = [];
         $lotto = Lotto::findOrFail($lottoId);
         $lottoCode = $lotto->code_lotto;
-        $preAssembled = PreAssembled::findOrFail($lotto->pre_assembled_id);
+        $preassembleds = Preassembled::findOrFail($lotto->pre_assembled_id);
         $components = LottoArticle::where('lotto_id', $lottoId)->get();
         foreach ($components as $component) {
             array_push($articles, Article::where('id', $component->article_id)->first());
             array_push($supplierCodes, LottoArticle::where('article_id', $component->article_id)->first());
         }
-        return view('operator.lotto-edit', compact('lotto', 'preAssembled', 'components', 'lottoCode', 'articles', 'supplierCodes'));
+        return view('operator.lotto-edit', compact('lotto', 'preassembleds', 'components', 'lottoCode', 'articles', 'supplierCodes'));
     }
 
     public function updateLotto(Request $request){
@@ -123,5 +123,20 @@ class OperatorController extends Controller
             return redirect()->route('operator.index')
             ->with('success', 'Lotto aggiornato con successo');
         }
+    }
+
+    public function createFromExisting($lottoId, LottoService $lottoService)
+    {
+        $articles = [];
+        $supplierCodes = [];
+        $lotto = Lotto::findOrFail($lottoId);
+        $lottoCode = $lottoService->generaCodiceLotto();
+        $preassembleds = Preassembled::findOrFail($lotto->pre_assembled_id);
+        $components = LottoArticle::where('lotto_id', $lottoId)->get();
+        foreach ($components as $component) {
+            array_push($articles, Article::where('id', $component->article_id)->first());
+            array_push($supplierCodes, LottoArticle::where('article_id', $component->article_id)->first());
+        }
+        return view('operator.create-from-existing', compact('lotto', 'preassembleds', 'components', 'lottoCode', 'articles', 'supplierCodes'));
     }
 }

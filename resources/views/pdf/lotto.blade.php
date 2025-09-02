@@ -53,7 +53,7 @@
 
     <div class="section">
         <span class="red">CODICE PRE-ASSEMBLATO:</span>
-        <span class="light">{{ $preAssembled->code }}</span><br>
+        <span class="light">{{ $preassembleds->code }}</span><br>
 
         <span class="red">LOTTO N°:</span>
         <span class="light">{{ $lotto->code_lotto }}</span><br>

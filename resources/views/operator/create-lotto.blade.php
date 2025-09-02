@@ -1,3 +1,3 @@
 <x-app-layout>
-    <livewire:lotto-save :preAssembled="$preAssembled" :lottoCode="$lottoCode" :articles="$articles" :supplierCodes="$supplierCodes" :components="$components" />
+    <livewire:lotto-save :preassembleds="$preassembleds" :lottoCode="$lottoCode" :articles="$articles" :supplierCodes="$supplierCodes" :components="$components" :context="'create'" />
 </x-app-layout>

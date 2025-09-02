@@ -5,7 +5,7 @@ namespace App\Livewire;
 use App\Models\Article;
 use App\Models\PreassembledArticle;
 use Livewire\Component;
-use App\Models\PreAssembled;
+use App\Models\Preassembled;
 class SubmitPreassembled extends Component
 {
     // IDs selezionati (stato sorgente affidabile per Livewire)
@@ -69,7 +69,7 @@ class SubmitPreassembled extends Component
 
     // Step 2: conferma, salva e reindirizza
     public function confirmSubmit(){
-        $preAssembled = PreAssembled::updateOrCreate([
+        $preassembleds = Preassembled::updateOrCreate([
             'code' => $this->preassembled_code,
         ],[
             'description' => $this->preassembled_description,
@@ -80,7 +80,7 @@ class SubmitPreassembled extends Component
         foreach ($this->selectedArticles as $sa) {
             if (!isset($sa->id)) { continue; }
             PreassembledArticle::firstOrCreate([
-                'pre_assembled_id' => $preAssembled->id,
+                'pre_assembled_id' => $preassembleds->id,
                 'article_id' => $sa->id,
             ]);
         }
