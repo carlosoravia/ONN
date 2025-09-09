@@ -22,10 +22,17 @@
                         <x-nav-link :href="route('operator.index')" :active="request()->routeIs('operator.index')">
                             {{ __('Dashboard') }}
                         </x-nav-link>
+                        <x-nav-link :href="route('select.preassembled')" :active="request()->routeIs('select.preassembled')">
+                            {{ __('Crea Lotto') }}
+                        </x-nav-link>
+                    @elseif(Auth::user()->role == 'Sales')
+                        <x-nav-link :href="route('sales.index')" :active="request()->routeIs('operator.index')">
+                            {{ __('Dashboard') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('sales.viewOrders')" :active="request()->routeIs('select.preassembled')">
+                            {{ __('Visualizza ordini') }}
+                        </x-nav-link>
                     @endif
-                    <x-nav-link :href="route('select.preassembled')" :active="request()->routeIs('select.preassembled')">
-                        {{ __('Crea Lotto') }}
-                    </x-nav-link>
                 </div>
             </div>
 

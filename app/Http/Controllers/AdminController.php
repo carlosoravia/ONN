@@ -79,31 +79,29 @@ class AdminController extends Controller
         AuditLogService::log('deleted', 'elimato utente', $user);
     }
     /**
-     * Imposta il ruolo di un utente su Admin.
+     * Imposta il ruolo di un utente in base alla scelta.
      *
      * @param int $id
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function makeAdmin($id)
+    public function changeRole($id, Request $request)
     {
         $user = User::findOrFail($id);
-        $user->role = 'Admin';
+        switch ($request->role) {
+            case 'Admin':
+                $user->role = $request->role;
+                break;
+            case 'Operator':
+                $user->role = $request->role;
+                break;
+            case 'Sales':
+                $user->role = $request->role;
+                break;
+            default:
+                return redirect()->back()->with('error', 'Ruolo non valido.');
+        }
         $user->save();
-
-        return redirect()->back()->with('success', 'Ruolo impostato su Admin.');
-    }
-    /**
-     * Imposta il ruolo di un utente su Operatore.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function makeOperator($id)
-    {
-        $user = User::findOrFail($id);
-        $user->role = 'Operator';
-        $user->save();
-        return redirect()->back()->with('success', 'Ruolo impostato su Operatore.');
+        return redirect()->back()->with('success', 'Ruolo impostato su ' . $request->role . ' con successo.');
     }
     /**
      * Crea un nuovo utente con validazione.

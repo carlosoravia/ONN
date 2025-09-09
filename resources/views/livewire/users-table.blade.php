@@ -14,48 +14,50 @@
     <div class="h-[32vh] w-full mt-20" wire:loading>
         <x-loader size="12" color="azure-500" message="Caricamento utenti..." />
     </div>
-    <table class="w-full h-max-content border border-gray-900 text-sm" wire:loading.remove>
-        <thead class="bg-gray-200 text-left text-white">
-            <tr class="table w-full table-fixed">
-                <th class="border border-gray-900 px-2 py-1 uppercase w-1/4">Utente<br><span class="text-xs font-normal">(descrizione del lotto)</span></th>
-                <th class="border border-gray-900 px-2 py-1 uppercase w-1/4">Matricola</th>
-                <th class="border border-gray-900 px-2 py-1 uppercase w-1/4">Ruolo</th>
-                <th class="border border-gray-900 px-2 py-1 uppercase w-1/4">Controlli</th>
-            </tr>
-        </thead>
-        <tbody class="block max-h-[40vh] overflow-y-auto w-full text-white">
-            @foreach ($users as $u)
-            <tr class="table w-full table-fixed">
-                <td class="border border-gray-900 w-1/4 p-5 ">{{$u->name}}</td>
-                <td class="border border-gray-900 w-1/4 px-2 py-1">{{$u->operator_code}}</td>
-                <td class="border border-gray-900 w-1/4 px-2 py-1 {{ $u->role == 'Admin' ? 'text-green-400' : 'text-white' }}">{{$u->role}}</td>
-                <td class="grid grid-cols-2 place-items-center px-3 py-1 w-fit">
-                    @if ($u->role === 'Admin')
-                        <form action="{{ route('user.makeOperator', $u->id) }}" method="POST" class="mx-3 inline">
-                        @csrf
-                            <button type="submit" class="bg-blue-600 text-white rounded hover:text-azure-600 hover:bg-gray-400 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out p-3 text-center">
-                                Rendi Operatore
-                            </button>
-                        </form>
-                    @else
-                        <form action="{{ route('user.makeAdmin', $u->id) }}" method="POST" class="mx-3 inline">
-                        @csrf
-                            <button type="submit" class="bg-green-600 text-white rounded hover:text-azure-600 hover:bg-gray-400 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-outn p-3 text-center">
-                                Rendi Admin
-                            </button>
-                        </form>
-                    @endif
-                    <form action="{{ route('user.delete', $u->id) }}" method="POST" class="mx-3 inline">
-                    @csrf
-                        <button type="submit" class="bg-red-600 text-white rounded hover:text-azure-600 hover:bg-gray-400 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out p-3 text-center">
-                            Elimina
-                        </button>
-                    </form>
-                </td>
-            </tr>
-            @endforeach
-        </tbody>
-    </table>
+    <div class="max-h-[40vh] overflow-y-auto rounded">
+        <table class="w-full border border-gray-900 text-sm" wire:loading.remove>
+            <thead class="sticky top-0 bg-gray-200 text-left text-white">
+                <tr class="">
+                    <th class="border border-gray-900 px-2 py-1 uppercase w-1/4">Utente<br><span class="text-xs font-normal">(descrizione del lotto)</span></th>
+                    <th class="border border-gray-900 px-2 py-1 uppercase w-1/4">Matricola</th>
+                    <th class="border border-gray-900 px-2 py-1 uppercase w-1/4">Ruolo</th>
+                    <th class="border border-gray-900 px-2 py-1 uppercase w-1/4">Controlli</th>
+                </tr>
+            </thead>
+            <tbody class="text-white">
+                @foreach ($users as $u)
+                <tr class="">
+                    <td class="border border-gray-900 w-1/4 p-5 ">{{$u->name}}</td>
+                    <td class="border border-gray-900 w-1/4 px-2 py-1">{{$u->operator_code}}</td>
+                    <td class="border border-gray-900 w-1/4 px-2 py-1 {{ $u->role == 'Admin' ? 'text-green-400' : 'text-white' }}">{{$u->role}}</td>
+                    <td class="px-2 py-1">
+                        <div class="flex justify-center items-center overflow-x-auto whitespace-nowrap max-w-xs">
+                            <form action="{{ route('user.changeRole', $u->id) }}" method="POST" class="">
+                            @csrf
+                            <div class="flex items-center space-x-2">
+                                <select name="role" class="w-32 border rounded p-2 bg-white text-black rounded-md shadow-sm focus:ring focus:ring-blue-300">
+                                    <option value="Admin">Admin</option>
+                                    <option value="Operator">Operatore</option>
+                                    <option value="Sales">Commerciale</option>
+                                </select>
+                                <button type="submit" class="bg-blue-600 text-white rounded hover:bg-azure-600 hover:bg-gray-400 focus:outline-none transition duration-150 ease-in-out p-3 text-center">
+                                    Salva
+                                </button>
+                            </div>
+                            </form>
+                            <form action="{{ route('user.delete', $u->id) }}" method="POST" class="mx-3 inline">
+                            @csrf
+                                <button type="submit" class="bg-red-600 text-white rounded hover:text-azure-600 hover:bg-gray-400 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out p-3 text-center">
+                                    Elimina
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
     @else
     <div class="flex justify-between items-center border-b border-gray-300 pb-2 mb-4">
         <div>

@@ -25,6 +25,6 @@ class EditPreassembled extends Component
             $query->where('pre_assembled_id', $this->preassembleds->id);
         })->get();
 
-        return view('livewire.edit-preassembleds');
+        return view('livewire.edit-preassembled');
     }
 }

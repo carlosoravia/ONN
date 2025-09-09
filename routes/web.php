@@ -1,13 +1,16 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Controller;
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\OperatorController;
+use App\Http\Controllers\Controller;
 use App\Http\Controllers\FrontController;
+use App\Http\Controllers\OperatorController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SalesController;
 use App\Http\Middleware\AdminAccess;
 use App\Http\Middleware\CheckOperatorCode;
+use App\Http\Middleware\SalesAccess;
+use Illuminate\Support\Facades\Route;
+
 
 Route::get('/', function () {
     return view('welcome'); // pubblica
@@ -51,18 +54,24 @@ Route::middleware(['auth', AdminAccess::class])->group(function () {
     Route::post('/user/{id}/delete', [AdminController::class, 'deleteUser'])->name('user.delete');
     Route::post('/user/{id}/make-admin', [AdminController::class, 'makeAdmin'])->name('user.makeAdmin');
     Route::post('/user/{id}/make-operator', [AdminController::class, 'makeOperator'])->name('user.makeOperator');
+    Route::post('/user/{id}/change-role', [AdminController::class, 'changeRole'])->name('user.changeRole');
+
 
     Route::post('/create-article', [AdminController::class, 'createArticle'])->name('article.create');
     Route::post('/article/{id}/delete', [AdminController::class, 'deleteArticle'])->name('article.delete');
     Route::post('/article/{id}/make-moca', [AdminController::class, 'updateArticle'])->name('article.update');
 
     // conferma creazione preassemblato (fallback non-Livewire)
-    Route::post('/preassembled/store', [AdminController::class, 'storePreassembled'])
-        ->name('admin.preassembled.store');
-
+    Route::post('/preassembled/store', [AdminController::class, 'storePreassembled'])->name('admin.preassembled.store');
     Route::post('/preassembled/{id}/delete', [AdminController::class, 'deletePreassembled'])->name('preassembled.delete');
 
 });
+
+Route::middleware(['auth', SalesAccess::class])->group(function () {
+    Route::get('/sales-dashboard', [SalesController::class, 'index'])->name('sales.index');
+    Route::get('/sales-view-orders', [SalesController::class, 'viewOrders'])->name('sales.viewOrders');
+});
+
 
 Route::middleware(['auth', CheckOperatorCode::class])->group(function () {
     Route::get('/bingo-perasso', [ProfileController::class, 'bingo'])->name('bingo');
