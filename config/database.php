@@ -97,19 +97,17 @@ return [
             'sslmode' => 'prefer',
         ],
 
-        // 'mago' => [
-        //     'driver' => 'sqlsrv',
-        //     'host' => env('DB_MAGO_HOST', ''),
-        //     'port' => env('DB_MAGO_PORT', '3306'),
-        //     'database' => env('DB_MAGO_DATABASE', 'ONNWATER_SRL'),
-        //     'username' => env('DB_MAGO_USERNAME', 'Softcontrol'),
-        //     'password' => env('DB_MAGO_PASSWORD', 'Softcontrol'),
-        //     'charset' => 'utf8mb4',
-        //     'collation' => 'utf8mb4_unicode_ci',
-        //     'prefix' => '',
-        //     'strict' => true,
-        //     'engine' => null,
-        // ],
+        'sqlsrv' => [
+        'driver' => 'sqlsrv',
+        'host' => env('DB_SQLSRV_HOST', 'localhost'),
+        'port' => env('DB_SQLSRV_PORT', '1433'),
+        'database' => env('DB_SQLSRV_DATABASE', 'forge'),
+        'username' => env('DB_SQLSRV_USERNAME', 'forge'),
+        'password' => env('DB_SQLSRV_PASSWORD', ''),
+        'charset' => 'utf8',
+        'prefix' => '',
+        'prefix_indexes' => true,
+    ],
     ],
 
     /*
