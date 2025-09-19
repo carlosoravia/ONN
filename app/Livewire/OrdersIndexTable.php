@@ -5,6 +5,7 @@ namespace App\Livewire;
 use Livewire\Component;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
+use App\Models\Order;
 
 class OrdersIndexTable extends Component
 {
@@ -38,10 +39,6 @@ class OrdersIndexTable extends Component
                 'label' => Str::ucfirst($dt->translatedFormat('F Y')),
             ];
         }
-
-        // mock data: ogni riga ha una 'date'
-        $this->rows = $this->makeMockRows();
-
         // calcola settimane del mese corrente
         $this->weeksForMonth = $this->computeWeeksForMonth($this->currentMonth);
     }
@@ -142,59 +139,18 @@ class OrdersIndexTable extends Component
         return array_values(array_unique($weeks));
     }
 
-    /** genera molti ordini fittizi, calcolando week e month */
-    protected function makeMockRows(): array
-    {
-        $rows = [];
-
-        // utility per aggiungere riga
-        $add = function (&$rows, $id, $order, $client, $code, $qty, $tot, $line, Carbon $date) {
-            $rows[] = [
-                'id'           => $id,
-                'order_code'   => $order,
-                'client'       => $client,
-                'product_code' => $code,
-                'quantity'     => $qty,
-                'total'        => $tot,
-                'line'         => $line,
-                'date'         => $date->toDateString(),
-                'week'         => $this->customWeekNumber($date),
-            ];
-        };
-
-        $id = 1;
-        $lines = ['domestica','ufficio','sprint','quantitativa'];
-        $clients = ['FERRARI IMPIANTI','MOIA WELLNESS','FILTRA','DEMON','ACQUA QUALITY','MC-CLEAN','SAMMARTINI','SEQUOIA','JOMI','AQUALEX','STE FOUNTAIN','AVANTGARDE','STE ITKAN'];
-
-        // distribuisci su tanti mesi: 3 indietro -> 12 avanti
-        for ($m = -3; $m <= 12; $m++) {
-            foreach ($lines as $line) {
-                // 2–4 ordini per linea al mese
-                $n = rand(2, 4);
-                for ($i=0; $i<$n; $i++) {
-                    $date = now()->startOfMonth()->addMonths($m)->addDays(rand(0, 27));
-                    $add(
-                        $rows,
-                        $id++,
-                        strtoupper(substr($line,0,3)).'/'.str_pad((string)rand(1,9999),4,'0',STR_PAD_LEFT),
-                        $clients[array_rand($clients)],
-                        strtoupper(substr($line,0,2)).rand(10,99).'0EAC-'.str_pad((string)rand(1,999),3,'0',STR_PAD_LEFT),
-                        rand(5, 40),
-                        rand(30, 250),
-                        $line,
-                        $date
-                    );
-                }
-            }
-        }
-
-        // ordina per data
-        usort($rows, fn($a,$b) => strcmp($a['date'],$b['date']));
-        return $rows;
-    }
-
     public function render()
     {
-        return view('livewire.orders-index-table');
+        // Filtra ordini per mese selezionato
+        $month = $this->currentMonth;
+        $startDate = Carbon::createFromFormat('Y-m', $month)->startOfMonth();
+        $endDate = Carbon::createFromFormat('Y-m', $month)->endOfMonth();
+
+        $orders = Order::whereBetween('data_ordine', [$startDate, $endDate])
+            ->with(['client', 'lines'])
+            ->orderBy('data_ordine', 'desc')
+            ->get();
+
+        return view('livewire.orders-index-table', compact('orders'));
     }
 }

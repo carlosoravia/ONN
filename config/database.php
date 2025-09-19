@@ -107,6 +107,14 @@ return [
         'charset' => 'utf8',
         'prefix' => '',
         'prefix_indexes' => true,
+        'options' => [
+            // Disabilita SSL se il server non lo supporta
+            'Encrypt' => env('DB_SQLSRV_ENCRYPT', 'no'),
+            'TrustServerCertificate' => env('DB_SQLSRV_TRUST_CERT', true),
+
+            // Permette query multiple contemporaneamente
+            'MultipleActiveResultSets' => true,
+        ],
     ],
     ],
 

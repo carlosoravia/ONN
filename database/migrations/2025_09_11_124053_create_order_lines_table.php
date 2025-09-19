@@ -13,12 +13,12 @@ return new class extends Migration
     {
         Schema::create('order_lines', function (Blueprint $table) {
             $table->id();
-            $table->string('order_id');   // FK verso orders
+            $table->unsignedBigInteger('order_id');   // FK verso orders
             $table->string('article_id'); // FK verso articles
             $table->decimal('quantita', 10, 2)->default(0);
             $table->string('um', 10)->nullable();
             $table->date('data_cons_prevista')->nullable();
-            $table->foreign('order_id')->references('id')->on('orders')->cascadeOnDelete();
+            $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
             $table->foreign('article_id')->references('id')->on('sales_articles');
             $table->timestamps();
         });

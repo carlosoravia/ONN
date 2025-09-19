@@ -4,10 +4,12 @@ namespace App\Console\Commands;
 
 use App\Models\Article;
 use App\Models\Preassembled;
+use App\Models\PreassembledArticle;
+use App\Traits\XmlInterpreter;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use SimpleXMLElement;
-use App\Traits\XmlInterpreter;
+
 class ImportPreassembledFromMago extends Command
 {
     /**
@@ -27,128 +29,87 @@ class ImportPreassembledFromMago extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): int
     {
-        // $filePath = "/var/backups/mago/estrazione-mago.xml";
-        $filePath = $this->ask('Inserisci il percorso del file XML:');
-        if (!file_exists($filePath)) {
-            $this->error("❌ File non trovato: $filePath");
-            return 1;
-        }
-        try {
-            $xml = $this->loadXml($filePath);
-        } catch (\Throwable $e) {
-            $this->error("❌ Errore nel parsing XML: " . $e->getMessage());
-            return 1;
-        }
+        $this->info("Inizio import preassemblati...");
+        $start = microtime(true);
+        $insertedPreassembled = 0;
+        $updatedPreassembled = 0;
+        $insertedArticles = 0;
+        $updatedArticles = 0;
+        $pivotCount = 0;
 
-        // 2) Primo passaggio: articoli + MOCA
-        $count = 0;
-        $mocaCount = 0;
+        // 1. Leggiamo dal remoto
+        $rows = DB::connection('sqlsrv')->table('CI_BOM')->get();
 
-        foreach ($this->records($xml, 'record') as $record) {
-            $code   = $this->xmlStr($record, 'CodiceComponente');     // es. "010104-1-F375"
-            if (!$code) { continue; }
-
-            $isMoca = $this->xmlStr($record, 'CatOmoFiglio') === '012'; // tua logica MOCA
-
-            try {
-                Article::updateOrCreate(
-                    ['code' => $code],
-                    [
-                        'description' => $this->xmlStr($record, 'DescCompo'),
-                        'is_moca'     => $isMoca,
-                    ]
-                );
-                $count++;
-                if ($isMoca) { $mocaCount++; }
-                //$this->line("✔ Articolo importato: {$article->code} ({$article->description})" . ($isMoca ? " [MOCA]" : ""));
-            } catch (\Throwable $e) {
-                $this->error("❌ Errore salvataggio articolo {$code}: " . $e->getMessage());
-            }
+        if ($rows->isEmpty()) {
+            $this->warn("⚠ Nessun dato trovato in CI_BOM");
+            return 0;
         }
 
-        $this->info("Totale articoli elaborati: {$count}");
-        $this->info("Totale articoli MOCA: {$mocaCount}");
+        // Carica codici esistenti in memoria
+        $existingPreassembled = Preassembled::all()->keyBy('code');
+        $existingArticles = Article::all()->keyBy('code');
 
-        // 3) Secondo passaggio: costruzione struttura Preassembled -> Articoli (con order)
-        $struttura = [];
-        $index = 0;
-
-        foreach ($this->records($xml, 'record') as $record) {
-            $index++;
-
-            $padre      = $this->xmlStr($record, 'CodicePadre');       // es. "A00-MO-90-150-3-I5-B"
-            $componente = $this->xmlStr($record, 'CodiceComponente');  // es. "010104-1-F375"
-            if (!$padre || !$componente) {
-                $this->warn("⏭ Riga {$index} saltata: Codice padre o componente mancante");
-                continue;
+        foreach ($rows as $row) {
+            // 2. Articolo padre (preassembled)
+            if (isset($existingPreassembled[$row->CodicePadre])) {
+                $preassembled = $existingPreassembled[$row->CodicePadre];
+                $preassembled->update([
+                    'description'       => $row->DescPadre,
+                    'padre_description' => $row->DescCatPadre,
+                    'activity'          => ' ',
+                ]);
+                $updatedPreassembled++;
+            } else {
+                $preassembled = Preassembled::create([
+                    'code'              => $row->CodicePadre,
+                    'description'       => $row->DescPadre,
+                    'padre_description' => $row->DescCatPadre,
+                    'activity'          => ' ',
+                ]);
+                $existingPreassembled[$row->CodicePadre] = $preassembled;
+                $insertedPreassembled++;
             }
 
-            if (!isset($struttura[$padre])) {
-                $struttura[$padre] = [
-                    'description'       => $this->xmlStr($record, 'DescPadre'),
-                    'padre_description' => $this->xmlStr($record, 'DescPadre'),
-                    'activity'          => '',                  // rimane vuota come nel tuo file
-                    'articoli'          => []
-                ];
+            // 3. Articolo figlio (article)
+            if (isset($existingArticles[$row->CodiceComponente])) {
+                $article = $existingArticles[$row->CodiceComponente];
+                // Aggiorna sempre senza errori se già esiste
+                $article->update([
+                    'description'       => $row->DescCompo,
+                    'padre_description' => $row->DescCatFiglio,
+                ]);
+                $updatedArticles++;
+            } else {
+                $article = Article::create([
+                    'code'              => $row->CodiceComponente,
+                    'description'       => $row->DescCompo,
+                    'padre_description' => $row->DescCatFiglio,
+                ]);
+                $existingArticles[$row->CodiceComponente] = $article;
+                $insertedArticles++;
             }
 
-            $struttura[$padre]['articoli'][$componente] = [
-                'description' => $this->xmlStr($record, 'DescCompo'),
-                'order'       => $this->xmlInt($record, 'NumRiga', 0),
-                // 'qty'      => $this->xmlFloat($record, 'Qta', 0),
-                // 'um'       => $this->xmlStr($record, 'UM'),
-            ];
+            // 4. Relazione pivot
+            PreassembledArticle::updateOrCreate(
+                [
+                    'pre_assembled_id' => $preassembled->id,
+                    'article_id'       => $article->id,
+                ],
+                [
+                    'order'     => $row->NumRiga,
+                ]
+            );
+            $pivotCount++;
         }
 
-        $this->info("\nTrovati " . count($struttura) . " preassemblati nel file XML.");
-        $associati = 0;
-
-        // 4) Upsert Preassembled + pivot preassembled_articles
-        foreach ($struttura as $codice => $info) {
-            try {
-                $pre = Preassembled::updateOrCreate(
-                    ['code' => $this->xmlStr($record, 'CodicePadre')],
-                    [
-                        'description'       => $this->xmlStr($record, 'DescPadre'),
-                        'padre_description' => $this->xmlStr($record, 'DescPadre'),
-                        'activity'          => '',
-                    ]
-                );
-                //$this->info("➕ Preassemblato: {$pre->code} - {$pre->description}");
-                foreach ($info['articoli'] as $artCode => $dati) {
-                    $article = Article::updateOrCreate(
-                        ['code' => $this->xmlStr($record, 'CodiceComponente')],
-                        [
-                            'description' => $this->xmlStr($record, 'DescCompo'),
-                            'is_moca'     => $this->xmlStr($record, 'CatOmoFiglio') === '012',
-                        ]
-                    );
-
-                    DB::table('preassembled_articles')->updateOrInsert(
-                        [
-                            'pre_assembled_id' => $pre->id,      // nome campo come nel tuo file
-                            'article_id'       => $article->id,
-                        ],
-                        [
-                            'order'      => (int) ($dati['order'] ?? 0),
-                            'updated_at' => now(),
-                            'created_at' => now(),
-                            // Se in futuro aggiungi qty/um nella pivot:
-                            // 'qty'      => $dati['qty'] ?? 0,
-                            // 'um'       => $dati['um'] ?? null,
-                        ]
-                    );
-                    $associati++;
-                    //$this->line("   ↳ collegato articolo {$article->code} ({$dati['description']}) con order {$dati['order']}");
-                }
-            } catch (\Throwable $e) {
-                $this->error("❌ Errore durante import preassemblato {$codice}: " . $e->getMessage());
-            }
-        }
-
-        $this->info("Associazioni preassemblato↔articolo create/aggiornate: {$associati}");
+        $duration = round(microtime(true) - $start, 2);
+        $this->info("✅ Import completato con successo.");
+        $this->info("Preassemblati inseriti: $insertedPreassembled, aggiornati: $updatedPreassembled");
+        $this->info("Articoli inseriti: $insertedArticles, aggiornati: $updatedArticles");
+        $this->info("Relazioni pivot elaborate: $pivotCount");
+        $this->info("Tempo impiegato: {$duration}s");
         return 0;
     }
 }

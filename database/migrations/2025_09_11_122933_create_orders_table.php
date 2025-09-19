@@ -12,7 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('orders', function (Blueprint $table) {
-            $table->string('id')->primary();
+            $table->id();
+            $table->string('mago_id')->unique();
             $table->string('num_ordine');
             $table->date('data_ordine')->nullable();
             $table->string('causale')->nullable();
