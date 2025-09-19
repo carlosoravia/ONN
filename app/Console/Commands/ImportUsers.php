@@ -32,7 +32,8 @@ class ImportUsers extends Command
      */
     public function handle()
     {
-        $path = $this->ask("📥 Inserisci il percorso completo del file Excel degli utenti");
+        // $path = $this->ask("📥 Inserisci il percorso completo del file Excel degli utenti");
+        $path = "C:\\Users\\softcontrol\\Documents\\ONN WATER WEB SERVER\\progetto genrazione pdf\\lista utenti.xlsx";
 
         if (!file_exists($path)) {
             $this->error("❌ File non trovato: $path");
