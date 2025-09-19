@@ -108,26 +108,28 @@
                 </tr>
             </thead>
             <tbody class="divide-y divide-gray-100 bg-white">
-                @forelse ($this->filteredRows as $o)
-                    <tr class="hover:bg-gray-50">
-                        <td class="px-4 py-3 text-sm font-medium">{{ $o['order_code'] }}</td>
-                        <td class="px-4 py-3 text-sm font-semibold">{{ $o['client'] }}</td>
-                        <td class="px-4 py-3 text-sm text-gray-700">{{ $o['product_code'] }}</td>
-                        <td class="px-4 py-3 text-sm text-right tabular-nums">{{ $o['quantity'] }}</td>
-                        <td class="px-4 py-3 text-sm text-right tabular-nums font-semibold">{{ $o['total'] }}</td>
-                        <td class="px-4 py-3 text-sm">{{ \Illuminate\Support\Carbon::parse($o['date'])->translatedFormat('d M Y') }}</td>
-                        <td class="px-4 py-3 text-sm">#{{ $o['week'] }}</td>
-                        <td class="px-4 py-3 text-sm">
-                            <textarea
-                                class="w-full border border-gray-200 rounded-lg px-2 py-1 text-sm focus:ring-2 focus:ring-blue-200 focus:border-blue-300"
-                                placeholder="Aggiungi nota…"
-                                x-data
-                                x-init="this.value = localStorage.getItem('note_{{ $o['id'] }}') ?? ''"
-                                @input="localStorage.setItem('note_{{ $o['id'] }}', $event.target.value)"
-                            ></textarea>
-                            <div class="mt-1 text-[11px] text-gray-400">Auto-salvataggio locale</div>
-                        </td>
-                    </tr>
+                @forelse ($orders as $order)
+                    @foreach ($order->lines as $line)
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-4 py-3 text-sm font-medium">{{ $order->num_ordine }}</td>
+                            <td class="px-4 py-3 text-sm font-semibold">{{ $order->client->ragione_sociale ?? '-' }}</td>
+                            <td class="px-4 py-3 text-sm text-gray-700">{{ $line->article_id }}</td>
+                            <td class="px-4 py-3 text-sm text-right tabular-nums">{{ $line->quantita }}</td>
+                            <td class="px-4 py-3 text-sm text-right tabular-nums font-semibold">{{ $line->total ?? '-' }}</td>
+                            <td class="px-4 py-3 text-sm">{{ \Illuminate\Support\Carbon::parse($order->data_ordine)->translatedFormat('d M Y') }}</td>
+                            <td class="px-4 py-3 text-sm">#{{ \Illuminate\Support\Carbon::parse($order->data_ordine)->weekOfYear }}</td>
+                            <td class="px-4 py-3 text-sm">
+                                <textarea
+                                    class="w-full border border-gray-200 rounded-lg px-2 py-1 text-sm focus:ring-2 focus:ring-blue-200 focus:border-blue-300"
+                                    placeholder="Aggiungi nota…"
+                                    x-data
+                                    x-init="this.value = localStorage.getItem('note_{{ $line->id }}') ?? ''"
+                                    @input="localStorage.setItem('note_{{ $line->id }}', $event.target.value)"
+                                ></textarea>
+                                <div class="mt-1 text-[11px] text-gray-400">Auto-salvataggio locale</div>
+                            </td>
+                        </tr>
+                    @endforeach
                 @empty
                     <tr>
                         <td colspan="8" class="px-4 py-6 text-center text-sm text-gray-500">
